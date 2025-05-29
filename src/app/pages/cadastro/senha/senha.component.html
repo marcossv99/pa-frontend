@@ -1,0 +1,66 @@
+<div class="container d-flex justify-content-center align-items-center min-vh-100 bg-light">
+  <div class="w-100" style="max-width: 500px">
+    <!-- Título centralizado -->
+    <h2 class="text-center fw-bold mb-5">Finalize o cadastro</h2>
+
+    <!-- Campo de Senha -->
+    <div class="mb-4">
+      <label for="senha" class="form-label fw-bold fs-5">Senha</label>
+      <div class="input-group">
+        <input
+          type="password"
+          id="senha"
+          class="form-control"
+          placeholder="Informe uma senha"
+          [(ngModel)]="senha"
+          name="senha"
+          required
+        />
+        <span
+          class="input-group-text"
+          role="button"
+          (click)="senha = ''"
+          *ngIf="senha"
+        >
+          <i class="bi bi-x-circle"></i>
+        </span>
+      </div>
+    </div>
+
+    <!-- Campo de Confirmar Senha -->
+    <div class="mb-4">
+      <label for="confirmarSenha" class="form-label fw-bold fs-5">Confirmar senha</label>
+      <div class="input-group">
+        <input
+          type="password"
+          id="confirmarSenha"
+          class="form-control"
+          placeholder="Confirme sua senha"
+          [(ngModel)]="confirmarSenha"
+          name="confirmarSenha"
+          required
+        />
+        <span
+          class="input-group-text"
+          role="button"
+          (click)="confirmarSenha = ''"
+          *ngIf="confirmarSenha"
+        >
+          <i class="bi bi-x-circle"></i>
+        </span>
+      </div>
+    </div>
+
+    <!-- Botões -->
+    <div class="d-flex justify-content-between mt-4">
+      <button class="btn btn-outline-success px-4" (click)="voltar()">Voltar</button>
+      <button
+        class="btn btn-success px-4"
+        (click)="confirmarCadastro()"
+        [disabled]="!senha || !confirmarSenha || senha !== confirmarSenha"
+      >
+        Finalizar Cadastro
+      </button>
+    </div>
+  </div>
+</div>

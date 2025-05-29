@@ -57,11 +57,29 @@
   color: #666;
   text-decoration: none;
   font-size: 0.9rem;
-  transition: color 0.3s;
+  transition: color 0.5s;
 }
 
 .forgot-password:hover {
   color: #4CAF50;
+}
+button{
+  transition: background-color 0.5s;
+}
+.form-control{
+  border: 1px solid #212529;
+  border-radius: 2px;
+  transition: border-color 0.5s;
+  height: 40px;
+}
+.form-control:focus{
+  border-color: #4CAF50;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+.form-label{
+  font-size: 1.2rem;
+  color: #222;
+  font-weight: 700;
 }
 
 /* Responsividade */

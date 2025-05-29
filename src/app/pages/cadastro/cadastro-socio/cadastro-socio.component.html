@@ -1,0 +1,70 @@
+<div class="container d-flex justify-content-center align-items-center min-vh-100 bg-light">
+    <div class="w-100" style="max-width: 900px">
+        <!-- Título -->
+        <h2 class="text-center fw-bold mb-5">Cadastro de Sócio</h2>
+
+        <!-- Formulário em 2 colunas -->
+        <form #form="ngForm">
+            <div class="row g-4">
+                <!-- Nome completo -->
+                <div class="col-md-6">
+                    <label class="form-label fw-bold fs-5">Nome completo</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Informe seu nome completo"
+                            [(ngModel)]="dadosCadastro.nomeCompleto" name="nomeCompleto" required />
+                        <span class="input-group-text" *ngIf="dadosCadastro.nomeCompleto"
+                            (click)="limparCampo('nomeCompleto')" style="cursor: pointer">
+                            <i class="bi bi-x-circle"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- CPF -->
+                <div class="col-md-6">
+                    <label class="form-label fw-bold fs-5">CPF</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Informe seu CPF"
+                            [(ngModel)]="dadosCadastro.cpf" name="cpf" required />
+                        <span class="input-group-text" *ngIf="dadosCadastro.cpf" (click)="limparCampo('cpf')"
+                            style="cursor: pointer">
+                            <i class="bi bi-x-circle"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Telefone -->
+                <div class="col-md-6">
+                    <label class="form-label fw-bold fs-5">Telefone</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Informe seu telefone"
+                            [(ngModel)]="dadosCadastro.telefone" name="telefone" required />
+                        <span class="input-group-text" *ngIf="dadosCadastro.telefone" (click)="limparCampo('telefone')"
+                            style="cursor: pointer">
+                            <i class="bi bi-x-circle"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="col-md-6">
+                    <label class="form-label fw-bold fs-5">Email</label>
+                    <div class="input-group">
+                        <input type="email" class="form-control" placeholder="Informe seu email"
+                            [(ngModel)]="dadosCadastro.email" name="email" required />
+                        <span class="input-group-text" *ngIf="dadosCadastro.email" (click)="limparCampo('email')"
+                            style="cursor: pointer">
+                            <i class="bi bi-x-circle"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botão Próximo -->
+            <div class="text-center mt-5">
+                <button class="btn btn-success px-5 py-2" (click)="proximoPasso()" [disabled]="!form.valid">
+                    Próximo
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

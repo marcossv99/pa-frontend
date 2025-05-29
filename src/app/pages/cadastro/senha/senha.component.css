@@ -1,0 +1,20 @@
+/* Centraliza tudo verticalmente usando vh */
+body, .container {
+  background-color: #f8f9fa; /* tom de cinza claro */
+}
+
+/* Bordas arredondadas e ícones ajustados podem ser estilizados aqui se necessário */
+.input-group .form-control {
+  border: 1px solid #212529;
+  border-radius: 4px;
+}
+.form-control:focus {
+  border-color: #4CAF50; /* verde */
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+/* Ícone no final dos campos */
+.input-group-text {
+  background-color: transparent;
+  border: 1px solid #212529;
+  cursor: pointer;
+}

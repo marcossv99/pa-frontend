@@ -1,0 +1,32 @@
+/* Fundo da tela */
+body,
+.container {
+    background-color: #f8f9fa;
+    /* cinza claro */
+}
+
+/* Campos de entrada */
+.input-group .form-control {
+    border: 1px solid #212529;
+    border-radius: 4px;
+}
+.form-control:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+/* Ícone de limpar campo */
+.input-group-text {
+    background-color: transparent;
+    border: 1px solid #212529;
+}
+.btn-success{
+    width: 50%;
+    border-radius: 2px;
+    background-color: #4CAF4F;
+
+    transition: background-color 0.4s;
+}
+.btn-success:hover{
+    background-color: #297e2e;
+}
