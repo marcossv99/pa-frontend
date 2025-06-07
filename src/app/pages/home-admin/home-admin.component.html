@@ -1,0 +1,110 @@
+<div class="container-fluid p-0">
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg bg-white shadow-sm py-2">
+    <div class="container">
+      <a class="navbar-brand" href="#">
+        <img src="assets/logo.png" alt="Logo" height="40">
+      </a>
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Reservas</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Quadras</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Horários</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero-section text-center py-5">
+    <div class="container">
+      <h1 class="display-4 fw-bold">Faça o cadastro de um novo <span class="highlight">membro</span> do Club</h1>
+      <button class="btn btn-success btn-lg mt-3">Fazer Cadastro</button>
+    </div>
+  </section>
+
+  <!-- Quadras Section -->
+  <section class="quadras-section text-center">
+    <div class="container">
+      <div class="d-flex justify-content-center align-items-center" style="gap: 1rem;">
+        <button class="btn btn-light btn-lg" (click)="anteriorImagem()" style="opacity:0.7; z-index:2;">&#8592;</button>
+        <div class="quadras-image position-relative w-100" style="max-width: 1200px; aspect-ratio: 16/9; min-height: 0;">
+          <img [src]="quadrasImagens[imagemAtual]" alt="Quadra" class="img-fluid w-100 h-100" style="border-radius: 0.5rem; object-fit: cover; aspect-ratio: 16/9; min-height: 0;">
+          <div class="overlay position-absolute bottom-0 start-0 p-5 d-flex flex-column align-items-start" style="background: rgba(0,0,0,0.35); width: 100%;">
+            <h2 class="fw-bold text-white mb-2" style="font-size: 2rem;">Quadras de Futebol</h2>
+            <button class="btn btn-outline-success">Visualizar Quadra</button>
+          </div>
+        </div>
+        <button class="btn btn-light btn-lg" (click)="proximaImagem()" style="opacity:0.7; z-index:2;">&#8594;</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reservas Section -->
+  <section class="reservas-section py-5 bg-light">
+    <div class="container">
+      <h2 class="fw-bold mb-4">Reservas</h2>
+      <div class="row g-3">
+        <div class="col-md-6 col-lg-4" *ngFor="let reserva of reservas">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">{{reserva.titulo}}</h5>
+              <p class="card-text">
+                Nome: {{reserva.nome}}<br>
+                Horário: {{reserva.horario}}<br>
+                Convidados: {{reserva.convidados.join(', ')}}
+              </p>
+              <div class="d-flex justify-content-between">
+                <button class="btn btn-outline-success">Editar</button>
+                <button class="btn btn-outline-danger">Cancelar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Usuários Section -->
+  <section class="usuarios-section py-5">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="fw-bold">Usuários</h2>
+        <button class="btn btn-success">Cadastrar novo associado +</button>
+      </div>
+      <div class="row g-3">
+        <div class="col-md-6" *ngFor="let usuario of usuarios">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">{{usuario.nome}}</h5>
+              <p class="card-text">
+                Email: {{usuario.email}}<br>
+                Número: {{usuario.numero}}<br>
+                CPF: {{usuario.cpf}}<br>
+                Senha: ********
+              </p>
+              <div class="d-flex justify-content-between">
+                <button class="btn btn-outline-success">Editar</button>
+                <button class="btn btn-outline-danger">Cancelar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-white py-4 mt-5">
+    <div class="container text-center">
+      <p class="mb-0">&copy; 2025 Club. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+</div>

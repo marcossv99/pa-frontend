@@ -4,7 +4,15 @@ body,
     background-color: #f8f9fa;
     /* cinza claro */
 }
-
+#formularioCadastro input:focus{
+    border: 1px solid #4CAF50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+#formularioCadastro input:hover{
+    border: 1px solid #4CAF50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+    transition: 0.4s;
+}
 /* Campos de entrada */
 .input-group .form-control {
     border: 1px solid #212529;

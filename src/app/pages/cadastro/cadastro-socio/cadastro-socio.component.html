@@ -4,16 +4,16 @@
         <h2 class="text-center fw-bold mb-5">Cadastro de Sócio</h2>
 
         <!-- Formulário em 2 colunas -->
-        <form #form="ngForm">
-            <div class="row g-4">
+        <form #form="ngForm" (ngSubmit)="proximoPasso()">
+            <div class="row g-4" id="formularioCadastro">
                 <!-- Nome completo -->
                 <div class="col-md-6">
                     <label class="form-label fw-bold fs-5">Nome completo</label>
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="Informe seu nome completo"
-                            [(ngModel)]="dadosCadastro.nomeCompleto" name="nomeCompleto" required />
-                        <span class="input-group-text" *ngIf="dadosCadastro.nomeCompleto"
-                            (click)="limparCampo('nomeCompleto')" style="cursor: pointer">
+                            [(ngModel)]="dadosCadastro.nome" name="nome" required />
+                        <span class="input-group-text" *ngIf="dadosCadastro.nome"
+                            (click)="limparCampo('nome')" style="cursor: pointer">
                             <i class="bi bi-x-circle"></i>
                         </span>
                     </div>
@@ -24,7 +24,8 @@
                     <label class="form-label fw-bold fs-5">CPF</label>
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="Informe seu CPF"
-                            [(ngModel)]="dadosCadastro.cpf" name="cpf" required />
+                            [(ngModel)]="dadosCadastro.cpf" name="cpf" required
+                            (ngModelChange)="dadosCadastro.cpf = formatarCpf(dadosCadastro.cpf)" />
                         <span class="input-group-text" *ngIf="dadosCadastro.cpf" (click)="limparCampo('cpf')"
                             style="cursor: pointer">
                             <i class="bi bi-x-circle"></i>
@@ -37,7 +38,8 @@
                     <label class="form-label fw-bold fs-5">Telefone</label>
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="Informe seu telefone"
-                            [(ngModel)]="dadosCadastro.telefone" name="telefone" required />
+                            [(ngModel)]="dadosCadastro.telefone" name="telefone" required
+                            (ngModelChange)="dadosCadastro.telefone = formatarTelefone(dadosCadastro.telefone)" />
                         <span class="input-group-text" *ngIf="dadosCadastro.telefone" (click)="limparCampo('telefone')"
                             style="cursor: pointer">
                             <i class="bi bi-x-circle"></i>
@@ -50,18 +52,22 @@
                     <label class="form-label fw-bold fs-5">Email</label>
                     <div class="input-group">
                         <input type="email" class="form-control" placeholder="Informe seu email"
-                            [(ngModel)]="dadosCadastro.email" name="email" required />
+                            [(ngModel)]="dadosCadastro.email" name="email" required
+                            [ngClass]="{'is-invalid': dadosCadastro.email && !emailValido(dadosCadastro.email)}" />
                         <span class="input-group-text" *ngIf="dadosCadastro.email" (click)="limparCampo('email')"
                             style="cursor: pointer">
                             <i class="bi bi-x-circle"></i>
                         </span>
+                    </div>
+                    <div *ngIf="dadosCadastro.email && !emailValido(dadosCadastro.email)" class="text-danger small mt-1">
+                        Email inválido
                     </div>
                 </div>
             </div>
 
             <!-- Botão Próximo -->
             <div class="text-center mt-5">
-                <button class="btn btn-success px-5 py-2" (click)="proximoPasso()" [disabled]="!form.valid">
+                <button type="submit" class="btn btn-success px-5 py-2" [disabled]="!form.valid">
                     Próximo
                 </button>
             </div>

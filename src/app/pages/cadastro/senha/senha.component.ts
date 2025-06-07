@@ -16,7 +16,12 @@ import { FormsModule } from '@angular/forms'; // necessário para usar ngModel
 export class SenhaComponent implements OnInit {
   senha: string = '';
   confirmarSenha: string = '';
-  socioParcial: Omit<SocioCadastroDTO, 'senha'> | null = null;
+  socioParcial: any = null;
+
+  // Controle do modal
+  showModal: boolean = false;
+  modalMessage: string = '';
+  modalSuccess: boolean = false;
 
   constructor(
     private cadastroService: CadastroServiceService,
@@ -35,28 +40,45 @@ export class SenhaComponent implements OnInit {
     }
   }
 
+  abrirModal(mensagem: string, sucesso: boolean = false) {
+    this.modalMessage = mensagem;
+    this.showModal = true;
+    this.modalSuccess = sucesso;
+  }
+
+  fecharModal() {
+    this.showModal = false;
+    if (this.modalSuccess) {
+      this.cadastroDadosService.limparDados();
+      this.router.navigate(['/login']);
+    }
+  }
+
   confirmarCadastro() {
+    if (this.senha.length < 6) {
+      this.abrirModal('A senha deve ter no mínimo 6 caracteres.');
+      return;
+    }
     if (this.senha !== this.confirmarSenha) {
-      alert('As senhas não coincidem.');
+      this.abrirModal('As senhas não coincidem.');
       return;
     }
 
     if (this.socioParcial) {
+      // Monta o objeto completo para o backend
       const socio: SocioCadastroDTO = {
         ...this.socioParcial,
-        senha: this.senha
+        senha: this.senha,
+        isAdmin: false // sempre envia isAdmin
       };
 
       this.cadastroService.cadastrarSocio(socio).subscribe({
-        next: (response) => {
-          console.log('Cadastro realizado com sucesso:', response);
-          alert('Cadastro realizado com sucesso!');
-          this.cadastroDadosService.limparDados();
-          this.router.navigate(['/login']);
+        next: () => {
+          this.abrirModal('Cadastro realizado com sucesso!', true);
         },
         error: (error) => {
+          this.abrirModal('Erro ao cadastrar o usuário.');
           console.error('Erro ao cadastrar:', error);
-          alert('Erro ao cadastrar o usuário.');
         }
       });
     }

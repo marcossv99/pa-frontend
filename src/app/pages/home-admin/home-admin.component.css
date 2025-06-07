@@ -1,0 +1,51 @@
+.hero-section {
+  background-color: #ffffff;
+  text-align: center;
+}
+
+.hero-section h1 .highlight {
+  color: green;
+}
+
+.quadras-section .quadras-image img {
+  border-radius: 0.5rem;
+  width: 100%;
+  height: auto;
+}
+
+.btn {
+  transition: all 0.3s ease;
+  border-radius: 2px;
+}
+
+.btn:hover {
+  transition: 0.5s;
+  opacity: 0.9;
+}
+
+.nav-link {
+  color: #000;
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: green;
+  text-decoration: underline;
+}
+.btn-outline-success{
+    background-color: #ffffff;
+    color: green;
+}
+.btn-outline-success:hover {
+  background-color: green;
+  color: white;
+}
+
+.btn-outline-danger:hover {
+  background-color: red;
+  color: white;
+}
+
+.card {
+  border-radius: 0.5rem;
+}

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { SocioCadastroDTO } from './cadastro-service.service';
 
 export interface CadastroParcialDTO {
-  nomeCompleto: string;
+  nome: string;
   cpf: string;
   email: string;
   telefone: string;

@@ -4,21 +4,23 @@ import { Observable } from 'rxjs';
 
 
 export interface SocioCadastroDTO {
-  nomeCompleto: string;
+  nome: string;
   cpf: string;
   email: string;
   telefone: string;
   senha: string;
+  isAdmin?: boolean;
 }
 @Injectable({
   providedIn: 'root'
 })
 
 export class CadastroServiceService {
-  private apiUrl = 'http://localhost:8080/api/socios/cadastro';
+  private apiUrl = '/api/associados'; // Usando proxy para evitar CORS
   constructor(private http: HttpClient) { }
 
   cadastrarSocio(dados: SocioCadastroDTO): Observable<any> {
-    return this.http.post(this.apiUrl, dados, { responseType: 'text' });
+    // Garante que isAdmin seja enviado (padrão false)
+    return this.http.post(this.apiUrl, { ...dados, isAdmin: false }, { responseType: 'text' });
   }
 }

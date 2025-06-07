@@ -5,7 +5,11 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
-
+.input-group input:focus{
+  border: 1px solid #4CAF50;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+  
+}
 /* Estilos para a seção esquerda */
 .left-section {
   padding: 3rem;

@@ -6,11 +6,17 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://spring-backend:8080/api/auth/login';
+  private apiUrl = '/api/auth/login';
 
   constructor(private http: HttpClient) { }
 
-  login(cpfOuEmail: string, senha: string) {
-    return this.http.post(this.apiUrl, { cpfOuEmail, senha }, { responseType: 'text' });
+  login(login: string, senha: string) {
+    let body: any = { senha };
+    if (login.includes('@')) {
+      body.email = login;
+    } else {
+      body.cpf = login;
+    }
+    return this.http.post(this.apiUrl, body, { responseType: 'text' });
   }
 }

@@ -64,3 +64,19 @@
     </div>
   </div>
 </div>
+
+<!-- Modal customizado -->
+<div *ngIf="showModal" class="modal-backdrop-custom">
+  <div class="modal-custom">
+    <div class="modal-content-custom">
+      <div class="modal-body-custom text-center">
+        <span [ngClass]="{'text-success': modalSuccess, 'text-center': !modalSuccess}" style="font-size: 1.2rem; font-weight: bold;">
+          {{ modalMessage }}
+        </span>
+      </div>
+      <div class="modal-footer-custom text-center mt-3">
+        <button class="btn btn-success px-4" (click)="fecharModal()">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
