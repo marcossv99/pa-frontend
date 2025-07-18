@@ -1,0 +1,902 @@
+/* ========== CORREÇÕES DE Z-INDEX PARA MODAIS ========== */
+
+/* Modal de edição deve aparecer por cima do modal de listagem */
+#modalEditarUsuario {
+  z-index: 1070 !important;
+}
+
+#modalEditarUsuario .modal-backdrop {
+  z-index: 1069 !important;
+}
+
+/* Modal de todos os usuários com z-index padrão */
+#modalTodosUsuarios {
+  z-index: 1055 !important;
+}
+
+/* ========== VARIÁVEIS CSS GLOBAIS ========== */
+:root {
+  --color-primary: #28CB8B;
+  --color-secondary: #66BB69;
+  --color-light-accent: #A5D6A7;
+  --color-shade: #24B77A;
+  --color-text-dark: #263238;
+  --border-radius: 2px;
+}
+
+/* ========== NAVBAR E NAVEGAÇÃO ========== */
+.nav-link {
+  color: #000;
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+.nav-link.active {
+  color: var(--color-primary) !important;
+  font-weight: 600;
+}
+
+/* ========== CARDS DE ESTATÍSTICAS ========== */
+.stats-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-radius: var(--border-radius) !important;
+  background: white;
+  border-left: 4px solid var(--color-light-accent) !important;
+}
+
+.stats-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(40, 203, 139, 0.15) !important;
+  border-left-color: var(--color-primary) !important;
+}
+
+.stats-card .card-body {
+  padding: 1.25rem !important;
+}
+
+.stats-card h4 {
+  color: var(--color-text-dark);
+  font-size: 1.75rem;
+}
+
+/* ========== BOTÕES PADRONIZADOS (ESQUEMA DE CORES EXATO) ========== */
+
+/* Botão Primary Custom (Principais - Verde #28CB8B com texto branco, hover invertido) */
+.btn-primary-custom {
+  background: #28CB8B !important;
+  border: 3px solid #28CB8B !important;
+  color: white !important;
+  border-radius: var(--border-radius) !important;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  padding: 0.5rem 1rem;
+}
+
+.btn-primary-custom:hover,
+.btn-primary-custom:focus,
+.btn-primary-custom:active {
+  background: white !important;
+  border: 3px solid #28CB8B !important;
+  color: #28CB8B !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(40, 203, 139, 0.3);
+}
+
+/* Botão Secondary Custom (Secundários - fundo branco, borda 3px, texto #66BB69, hover invertido) */
+.btn-secondary-custom {
+  background: white !important;
+  border: 3px solid #66BB69 !important;
+  color: #66BB69 !important;
+  border-radius: var(--border-radius) !important;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  padding: 0.5rem 1rem;
+}
+
+.btn-secondary-custom:hover,
+.btn-secondary-custom:focus,
+.btn-secondary-custom:active {
+  background: #66BB69 !important;
+  border: 3px solid #66BB69 !important;
+  color: white !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(102, 187, 105, 0.3);
+}
+
+/* Botões originais Bootstrap - PRINCIPAIS (#28CB8B com texto branco, hover invertido) */
+.btn-success,
+.btn-primary,
+.btn-info {
+  background-color: #28CB8B !important;
+  border: 3px solid #28CB8B !important;
+  color: white !important;
+  border-radius: var(--border-radius) !important;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-success:hover,
+.btn-success:focus,
+.btn-success:active,
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-info:hover,
+.btn-info:focus,
+.btn-info:active {
+  background: white !important;
+  border: 3px solid #28CB8B !important;
+  color: #28CB8B !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(40, 203, 139, 0.3);
+}
+
+/* Botões Bootstrap Secondary - SECUNDÁRIOS (fundo branco, borda 3px, texto #66BB69, hover invertido) */
+.btn-secondary {
+  background: white !important;
+  border: 3px solid #66BB69 !important;
+  color: #66BB69 !important;
+  border-radius: var(--border-radius) !important;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus,
+.btn-secondary:active {
+  background: #66BB69 !important;
+  border: 3px solid #66BB69 !important;
+  color: white !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(102, 187, 105, 0.3);
+}
+
+/* Botões Danger - Vermelho (fundo branco, borda 3px, texto vermelho, hover invertido) */
+.btn-danger {
+  background: white !important;
+  border: 3px solid #dc3545 !important;
+  color: #dc3545 !important;
+  border-radius: var(--border-radius) !important;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-danger:hover,
+.btn-danger:focus,
+.btn-danger:active {
+  background: #dc3545 !important;
+  border: 3px solid #dc3545 !important;
+  color: white !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+}
+
+/* Botões Outline - SECUNDÁRIOS (fundo branco, borda 3px, texto #66BB69, hover invertido) */
+.btn-outline-secondary {
+  background: white !important;
+  border: 3px solid #66BB69 !important;
+  color: #66BB69 !important;
+  border-radius: var(--border-radius) !important;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-secondary:hover,
+.btn-outline-secondary:focus,
+.btn-outline-secondary:active {
+  background: #66BB69 !important;
+  border: 3px solid #66BB69 !important;
+  color: white !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(102, 187, 105, 0.3);
+}
+
+/* Botões Outline - PRINCIPAIS (fundo branco, borda 3px, texto #28CB8B, hover invertido) */
+.btn-outline-primary {
+  background: white !important;
+  border: 3px solid #28CB8B !important;
+  color: #28CB8B !important;
+  border-radius: var(--border-radius) !important;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:focus,
+.btn-outline-primary:active {
+  background: #28CB8B !important;
+  border: 3px solid #28CB8B !important;
+  color: white !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(40, 203, 139, 0.3);
+}
+
+/* Botões Outline Danger - Vermelho (fundo branco, borda 3px, texto vermelho, hover invertido) */
+.btn-outline-danger {
+  background: white !important;
+  border: 3px solid #dc3545 !important;
+  color: #dc3545 !important;
+  border-radius: var(--border-radius) !important;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-danger:hover,
+.btn-outline-danger:focus,
+.btn-outline-danger:active {
+  background: #dc3545 !important;
+  border: 3px solid #dc3545 !important;
+  color: white !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+}
+
+/* Botões Outline Success - SECUNDÁRIOS (fundo branco, borda 3px, texto #28CB8B, hover invertido) */
+.btn-outline-success {
+  background: white !important;
+  border: 3px solid #28CB8B !important;
+  color: #28CB8B !important;
+  border-radius: var(--border-radius) !important;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-success:hover,
+.btn-outline-success:focus,
+.btn-outline-success:active {
+  background: #24B77A !important;
+  border: 3px solid #24B77A !important;
+  color: white !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(40, 203, 139, 0.3);
+}
+
+/* Botões Warning Customizados */
+.btn-warning-custom {
+  background-color: #FFC107 !important;
+  border-color: #FFC107 !important;
+  color: #000 !important;
+  padding: 0.5rem 1rem !important;
+  border-radius: var(--border-radius) !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease !important;
+}
+
+.btn-warning-custom:hover,
+.btn-warning-custom:focus,
+.btn-warning-custom:active {
+  background-color: #E0A800 !important;
+  border-color: #E0A800 !important;
+  color: #000 !important;
+  box-shadow: 0 2px 4px rgba(255, 193, 7, 0.2) !important;
+}
+
+.btn-warning-custom:active {
+  background-color: #D39E00 !important;
+  border-color: #D39E00 !important;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.1) !important;
+}
+
+/* ========== CARDS E LISTAS ========== */
+.card {
+  border-radius: var(--border-radius) !important;
+  border: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.card-header {
+  background: white !important;
+  border-bottom: 1px solid #e9ecef !important;
+  border-radius: var(--border-radius) var(--border-radius) 0 0 !important;
+}
+
+.card-header h5 {
+  color: var(--color-secondary);
+}
+
+.list-group-item {
+  border-radius: 0 !important;
+  border-left: none;
+  border-right: none;
+  transition: background-color 0.2s ease;
+  border-color: #e9ecef;
+}
+
+.list-group-item:hover {
+  background-color: #f8f9fa;
+}
+
+.list-group-item:first-child {
+  border-top: none;
+}
+
+.list-group-item:last-child {
+  border-bottom: none;
+}
+
+/* ========== BADGES DE STATUS ========== */
+.badge {
+  border-radius: var(--border-radius) !important;
+  font-weight: 500;
+  font-size: 0.75rem;
+}
+
+.badge.bg-success {
+  background-color: var(--color-primary) !important;
+}
+
+.badge.bg-warning {
+  background-color: #ffc107 !important;
+  color: #212529 !important;
+}
+
+.badge.bg-danger {
+  background-color: #dc3545 !important;
+}
+
+.badge.bg-secondary {
+  background-color: #6c757d !important;
+}
+
+.badge.bg-primary {
+  background-color: var(--color-primary) !important;
+}
+
+/* ========== INPUTS E FORMS ========== */
+.form-control,
+.form-select {
+  border-radius: var(--border-radius) !important;
+  border: 1px solid #dee2e6;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 0.2rem rgba(40, 203, 139, 0.25);
+}
+
+/* ========== MODAIS (ESQUEMA DE CORES DO SÓCIO) ========== */
+
+/* Headers dos Modais */
+.modal .modal-header.bg-success {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-shade) 100%) !important;
+  border-bottom: none;
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+}
+
+.modal .modal-header.bg-danger {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%) !important;
+  border-bottom: none;
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+}
+
+/* Conteúdo dos Modais */
+.modal-content {
+  border-radius: var(--border-radius) !important;
+  border: none;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.modal-footer {
+  border-top: 1px solid #e9ecef;
+  padding: 1rem 1.5rem;
+}
+
+/* Botões dos Modais */
+.modal .btn-secondary {
+  background: #6c757d !important;
+  border: 1px solid #6c757d !important;
+  color: white !important;
+  border-radius: var(--border-radius) !important;
+}
+
+.modal .btn-secondary:hover,
+.modal .btn-secondary:focus,
+.modal .btn-secondary:active {
+  background: #5a6268 !important;
+  border-color: #5a6268 !important;
+  color: white !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(108, 117, 125, 0.3);
+}
+
+.modal .btn-primary {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-shade) 100%) !important;
+  border: none !important;
+  color: white !important;
+  border-radius: var(--border-radius) !important;
+}
+
+.modal .btn-primary:hover,
+.modal .btn-primary:focus,
+.modal .btn-primary:active {
+  background: linear-gradient(135deg, var(--color-shade) 0%, var(--color-primary) 100%) !important;
+  color: white !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(40, 203, 139, 0.3);
+}
+
+.modal .btn-danger {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%) !important;
+  border: none !important;
+  color: white !important;
+  border-radius: var(--border-radius) !important;
+}
+
+.modal .btn-danger:hover,
+.modal .btn-danger:focus,
+.modal .btn-danger:active {
+  background: linear-gradient(135deg, #c82333 0%, #a02030 100%) !important;
+  color: white !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+}
+
+/* ========== ELEMENTOS ESPECÍFICOS DA DASHBOARD ========== */
+
+/* Título Principal */
+h1.text-success {
+  color: var(--color-primary) !important;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Ícones coloridos nos cards de estatísticas */
+.stats-card .text-success {
+  color: var(--color-primary) !important;
+}
+
+.stats-card .text-primary {
+  color: #007bff !important;
+}
+
+.stats-card .text-info {
+  color: #17a2b8 !important;
+}
+
+.stats-card .text-warning {
+  color: #ffc107 !important;
+}
+
+/* Headings dos cards */
+.card-header h5.text-success {
+  color: var(--color-primary) !important;
+  font-weight: 600;
+}
+
+/* Loading spinner customizado */
+.spinner-border.text-success {
+  color: var(--color-primary) !important;
+}
+
+/* User photo placeholder */
+.user-photo-placeholder {
+  background-color: #f8f9fa !important;
+  border: 2px dashed #dee2e6;
+}
+
+/* ========== DROPDOWN PERSONALIZADO ========== */
+.dropdown-menu {
+  border-radius: var(--border-radius) !important;
+  border: 1px solid #dee2e6;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-item {
+  transition: all 0.2s ease;
+  border-radius: var(--border-radius);
+  margin: 2px;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.dropdown-item.text-danger:hover {
+  background-color: #dc3545;
+  color: white;
+}
+
+/* ========== RESPONSIVIDADE ========== */
+@media (max-width: 768px) {
+  .stats-card .card-body {
+    padding: 1rem !important;
+  }
+  
+  .d-flex.gap-2 {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .btn.w-100 {
+    margin-bottom: 0.5rem;
+  }
+  
+  h1.text-success {
+    font-size: 1.5rem;
+  }
+  
+  .card-header h5 {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .container-fluid {
+    padding: 1rem !important;
+  }
+  
+  .btn-primary-custom,
+  .btn-secondary-custom {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .stats-card h4 {
+    font-size: 1.5rem;
+  }
+}
+
+/* ========== CLEAN CODE - ELIMINANDO REDUNDÂNCIAS ========== */
+
+/* Estilo base para todos os botões */
+.btn {
+  transition: all 0.3s ease;
+  font-weight: 500;
+  border-radius: var(--border-radius) !important;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+/* Estilo base para todos os cards */
+.card {
+  border: none !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Centralizando estilos de texto */
+.text-success {
+  color: var(--color-primary) !important;
+}
+
+.bg-success {
+  background-color: var(--color-primary) !important;
+}
+
+/* ========== CORREÇÕES ESPECÍFICAS DE CONTRASTE ========== */
+
+/* Garantir que todos os botões do Bootstrap tenham cores adequadas */
+.btn-secondary {
+  background: white !important;
+  border: 3px solid var(--color-secondary) !important;
+  color: var(--color-secondary) !important;
+  border-radius: var(--border-radius) !important;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus,
+.btn-secondary:active {
+  background: var(--color-secondary) !important;
+  border: 3px solid var(--color-secondary) !important;
+  color: white !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(102, 187, 105, 0.3);
+}
+
+/* Correção para botões de modal */
+.modal .btn-secondary {
+  background: white !important;
+  border: 3px solid var(--color-secondary) !important;
+  color: var(--color-secondary) !important;
+}
+
+.modal .btn-secondary:hover {
+  background: var(--color-secondary) !important;
+  color: white !important;
+}
+
+.modal .btn-primary {
+  background: var(--color-primary) !important;
+  border: 3px solid var(--color-primary) !important;
+  color: white !important;
+}
+
+.modal .btn-primary:hover {
+  background: white !important;
+  border: 3px solid var(--color-primary) !important;
+  color: var(--color-primary) !important;
+}
+
+.modal .btn-danger {
+  background: white !important;
+  border: 3px solid #dc3545 !important;
+  color: #dc3545 !important;
+}
+
+.modal .btn-danger:hover {
+  background: #dc3545 !important;
+  border: 3px solid #dc3545 !important;
+  color: white !important;
+}
+
+/* Dropdown items */
+.dropdown-item {
+  color: #212529 !important;
+  transition: all 0.2s ease;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+  background-color: var(--color-primary) !important;
+  color: white !important;
+}
+
+.dropdown-item.text-danger {
+  color: #dc3545 !important;
+}
+
+.dropdown-item.text-danger:hover,
+.dropdown-item.text-danger:focus {
+  background-color: #dc3545 !important;
+  color: white !important;
+}
+
+/* Badges */
+.badge {
+  border-radius: var(--border-radius) !important;
+  font-weight: 500;
+}
+
+.badge.bg-danger {
+  background-color: #dc3545 !important;
+  color: white !important;
+}
+
+.badge.bg-secondary {
+  background-color: #6c757d !important;
+  color: white !important;
+}
+
+.badge.bg-success {
+  background-color: var(--color-primary) !important;
+  color: white !important;
+}
+
+.badge.bg-warning {
+  background-color: #ffc107 !important;
+  color: #212529 !important;
+}
+
+.badge.bg-primary {
+  background-color: var(--color-primary) !important;
+  color: white !important;
+}
+
+.badge.bg-info {
+  background-color: #17a2b8 !important;
+  color: white !important;
+}
+
+/* Links na navegação */
+.nav-link.active {
+  color: var(--color-primary) !important;
+  font-weight: 600;
+}
+
+/* Spinner de loading */
+.spinner-border.text-success {
+  color: var(--color-primary) !important;
+}
+
+/* Alertas */
+.alert-danger {
+  background-color: #f8d7da !important;
+  border-color: #f5c6cb !important;
+  color: #721c24 !important;
+}
+
+.alert-info {
+  background-color: #d1ecf1 !important;
+  border-color: #bee5eb !important;
+  color: #0c5460 !important;
+}
+
+.alert-warning {
+  background-color: #fff3cd !important;
+  border-color: #ffeaa7 !important;
+  color: #856404 !important;
+}
+
+/* ========== SEÇÕES COM COR DE DESTAQUE #A5D6A7 ========== */
+
+/* Header do Dashboard */
+.dashboard-header {
+  border-bottom: 3px solid var(--color-light-accent) !important;
+  padding-bottom: 1rem !important;
+}
+
+/* Seção de Ações Rápidas */
+.quick-actions-card {
+  background: linear-gradient(135deg, var(--color-light-accent) 0%, #E8F5E8 100%) !important;
+  border: none !important;
+}
+
+.quick-actions-card .card-header {
+  background: var(--color-light-accent) !important;
+  color: var(--color-text-dark) !important;
+  border-bottom: 2px solid var(--color-secondary) !important;
+}
+
+/* Cards de conteúdo principal */
+.main-content-card {
+  border-top: 4px solid var(--color-light-accent) !important;
+}
+
+/* Alertas informativos */
+.alert-info-custom {
+  background: var(--color-light-accent) !important;
+  border: 2px solid var(--color-secondary) !important;
+  color: var(--color-text-dark) !important;
+}
+
+/* Badges especiais */
+.badge-light-accent {
+  background: var(--color-light-accent) !important;
+  color: var(--color-text-dark) !important;
+  border: 1px solid var(--color-secondary) !important;
+}
+
+/* Loading containers */
+.loading-container-accent {
+  background: rgba(165, 214, 167, 0.1) !important;
+  border: 2px dashed var(--color-light-accent) !important;
+  border-radius: var(--border-radius) !important;
+  padding: 2rem !important;
+}
+
+/* Footer de modais */
+.modal-footer-accent {
+  background: var(--color-light-accent) !important;
+  border-top: 2px solid var(--color-secondary) !important;
+}
+
+/* ========== DROPDOWN MENU STYLES ========== */
+.dropdown-item {
+  border: none !important;
+  background: none !important;
+  width: 100% !important;
+  text-align: left !important;
+  padding: 0.5rem 1rem !important;
+  color: #212529 !important;
+  transition: all 0.2s ease !important;
+  cursor: pointer !important;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+  background-color: #f8f9fa !important;
+  color: var(--color-primary) !important;
+}
+
+.dropdown-item.text-danger {
+  color: #dc3545 !important;
+}
+
+.dropdown-item.text-danger:hover,
+.dropdown-item.text-danger:focus {
+  background-color: #f8f9fa !important;
+  color: #dc3545 !important;
+}
+
+/* ========== DROPDOWN ADMIN ========== */
+.dropdown-toggle {
+  border-color: var(--color-primary) !important;
+  color: var(--color-primary) !important;
+  transition: all 0.3s ease;
+}
+
+.dropdown-toggle:hover {
+  background-color: var(--color-primary) !important;
+  color: white !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(40, 203, 139, 0.3);
+}
+
+.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(40, 203, 139, 0.25);
+}
+
+.dropdown-menu {
+  border: 1px solid rgba(40, 203, 139, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: var(--border-radius);
+}
+
+.dropdown-header {
+  color: var(--color-primary) !important;
+  font-weight: 600;
+}
+
+.dropdown-item {
+  transition: background-color 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background-color: rgba(40, 203, 139, 0.1);
+  color: var(--color-text-dark);
+}
+
+.dropdown-item.text-danger:hover {
+  background-color: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+}
+
+/* ========== ÁREA DO ADMIN E LOGOUT (MANTIDO PARA COMPATIBILIDADE) ========== */
+.admin-info {
+  padding: 0.5rem 1rem;
+  background: rgba(40, 203, 139, 0.05);
+  border-radius: var(--border-radius);
+  border: 1px solid rgba(40, 203, 139, 0.1);
+}
+
+.btn-logout {
+  border-color: #dc3545 !important;
+  color: #dc3545 !important;
+  transition: all 0.3s ease;
+}
+
+.btn-logout:hover {
+  background-color: #dc3545 !important;
+  color: white !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+}
+
+.btn-logout:active {
+  transform: translateY(0);
+}
+
+/* ========== HEADER DASHBOARD RESPONSIVO ========== */
+.dashboard-header {
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start !important;
+  }
+  
+  .dashboard-header > div:last-child {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .dashboard-header nav ul {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+}
+
+

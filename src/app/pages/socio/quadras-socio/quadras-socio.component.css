@@ -1,0 +1,161 @@
+/* Estilização geral */
+.quadra-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: none;
+}
+
+.quadra-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Hero Section */
+.bg-light {
+  background-color: #f8f9fa !important;
+}
+
+/* Botões de filtro */
+.btn-outline-success {
+  background: white !important;
+  border: 2px solid #28CB8B !important;
+  color: #28CB8B !important;
+  border-radius: 2px !important;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-success:hover,
+.btn-outline-success:focus,
+.btn-outline-success:active {
+  background: #28CB8B !important;
+  border-color: #28CB8B !important;
+  color: white !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(40, 203, 139, 0.3);
+}
+
+/* Cards de informações */
+.bg-light.p-2 {
+  transition: background-color 0.2s ease;
+}
+
+.bg-light.p-2:hover {
+  background-color: #e9ecef !important;
+}
+
+/* Ícones */
+.bi {
+  font-size: 1.2rem;
+}
+
+/* Badges */
+.badge {
+  font-size: 0.75rem;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .d-flex.justify-content-between {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .nav {
+    justify-content: center;
+  }
+  
+  .d-flex.gap-2.flex-wrap {
+    gap: 0.5rem !important;
+  }
+  
+  .btn {
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .container-fluid {
+    padding: 1rem !important;
+  }
+  
+  .row.mb-3.text-center .col-6 {
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* Animações */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.quadra-card {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Estados dos botões */
+.btn-success {
+  background: linear-gradient(135deg, #28CB8B 0%, #24B77A 100%) !important;
+  border: none !important;
+  color: white !important;
+  border-radius: 2px !important;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-success:hover,
+.btn-success:focus,
+.btn-success:active {
+  background: linear-gradient(135deg, #24B77A 0%, #28CB8B 100%) !important;
+  color: white !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(40, 203, 139, 0.3);
+}
+
+.btn-success:disabled {
+  background-color: #6c757d !important;
+  border-color: #6c757d !important;
+  color: white !important;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Spinner personalizado */
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+}
+
+/* Melhorias visuais */
+.card-img-top {
+  border-radius: 0.375rem 0.375rem 0 0;
+}
+
+.position-absolute.top-0.end-0 {
+  z-index: 10;
+}
+
+/* Footer */
+footer {
+  background-color: #f8f9fa;
+  margin-top: 3rem !important;
+  padding: 2rem 0;
+  border-radius: 0.375rem 0.375rem 0 0;
+}
+
+footer h6 {
+  color: #495057;
+  margin-bottom: 1rem;
+}
+
+footer .list-unstyled li {
+  margin-bottom: 0.5rem;
+  color: #6c757d;
+}

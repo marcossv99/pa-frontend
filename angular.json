@@ -23,7 +23,8 @@
             "assets": [
               {
                 "glob": "**/*",
-                "input": "public"
+                "input": "../uploads",
+                "output": "uploads"
               }
             ],
             "styles": [
@@ -67,7 +68,8 @@
               "buildTarget": "front:build:production"
             },
             "development": {
-              "buildTarget": "front:build:development"
+              "buildTarget": "front:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"
@@ -87,6 +89,11 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "**/*",
+                "input": "../uploads",
+                "output": "uploads"
               }
             ],
             "styles": [

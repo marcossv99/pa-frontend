@@ -1,0 +1,724 @@
+<div class="container-fluid p-4">
+  <!-- Navbar com botão de logout e foto de perfil -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <nav>
+      <ul class="nav">
+        <li class="nav-item"><a class="nav-link active" style="cursor: pointer;">Home</a></li>
+        <li class="nav-item"><a class="nav-link" (click)="navegarParaQuadras()" style="cursor: pointer;">Quadras</a></li>
+        <li class="nav-item"><a class="nav-link" (click)="abrirModalTodasReservas()" style="cursor: pointer;">Reservas</a></li>
+        <li class="nav-item"><a class="nav-link" (click)="navegarParaPerfil()" style="cursor: pointer;">Perfil</a></li>
+      </ul>
+    </nav>
+    
+    <div class="d-flex align-items-center gap-3">
+      <!-- Foto de perfil com upload -->
+      <div class="profile-photo-section">
+        <div class="profile-photo-container">
+          <img 
+            [src]="getFotoPerfilUrl()" 
+            alt="Foto do perfil" 
+            class="profile-photo"
+            (error)="onImageError($event)"
+            (click)="fileInputProfile.click()"
+            style="cursor: pointer;"
+            title="Clique para alterar foto"
+          />
+          <div class="profile-upload-overlay" (click)="fileInputProfile.click()" title="Alterar foto">
+            <i class="bi bi-camera"></i>
+          </div>
+        </div>
+        <input 
+          type="file" 
+          #fileInputProfile 
+          (change)="onFileSelectedProfile($event)" 
+          accept="image/*" 
+          style="display: none"
+        />
+        <button 
+          *ngIf="selectedFileProfile" 
+          class="btn btn-success btn-sm mt-1" 
+          (click)="uploadFotoPerfil()" 
+          [disabled]="isUploadingPhoto">
+          <i class="bi bi-check-circle me-1"></i>
+          {{ isUploadingPhoto ? 'Salvando...' : 'Salvar' }}
+        </button>
+      </div>
+      
+      <!-- Botão de logout -->
+      <button 
+        class="btn btn-outline-danger btn-sm d-flex align-items-center gap-2" 
+        (click)="fazerLogout()"
+        title="Fazer logout">
+        <i class="bi bi-box-arrow-right"></i>
+        Logout
+      </button>
+    </div>
+  </div>
+
+  <!-- Hero -->
+  <section class="text-center mb-5">
+    <h1 class="fw-bold display-5">
+      Reserve sua quadra<br />
+      com <span class="text-success">facilidade</span>
+    </h1>
+    <p class="text-muted">Escolha o melhor horário, adicione sua equipe e garanta sua diversão!</p>
+    <button class="btn btn-success px-4 py-2 mt-3" (click)="navegarParaQuadras()">Reserve Agora</button>
+  </section>
+
+  <!-- Carrossel de Quadras -->
+  <section class="position-relative mb-5" *ngIf="quadraDestaque">
+    <div 
+      class="img-fluid w-100 rounded-3"
+      style="max-height: 420px; object-fit: cover; width: 100%; height: 420px; background-image: url('/quadras/futebol.png'); background-size: cover; background-position: center; border-radius: 1rem;">
+    </div>
+    <div class="position-absolute top-50 start-0 translate-middle-y ps-3">
+      <button class="btn btn-light rounded-circle shadow-sm" (click)="anteriorQuadra()"><i class="bi bi-chevron-left"></i></button>
+    </div>
+    <div class="position-absolute top-50 end-0 translate-middle-y pe-3">
+      <button class="btn btn-light rounded-circle shadow-sm" (click)="proximaQuadra()"><i class="bi bi-chevron-right"></i></button>
+    </div>
+    <div class="position-absolute bottom-0 start-0 p-4 text-white" style="background: linear-gradient(transparent, rgba(0,0,0,0.7)); width: 100%; border-radius: 0 0 var(--bs-border-radius) var(--bs-border-radius);">
+      <h4 class="fw-bold text-white" style="color: white !important; text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">Quadra {{ quadraDestaque.numero }} - {{ quadraDestaque.modalidade }}</h4>
+      <p class="mb-2 text-white" style="color: white !important; text-shadow: 1px 1px 2px rgba(0,0,0,0.8);">Capacidade: {{ quadraDestaque.qtdPessoas }} pessoas</p>
+      <button class="btn btn-success btn-quadra-destaque mt-2" (click)="verHorariosDisponiveis()">
+        <i class="bi bi-clock me-2"></i>Ver horários disponíveis
+      </button>
+    </div>
+    <div class="position-absolute bottom-0 end-0 p-3">
+      <span class="badge bg-light text-dark">{{ carrosselIndex + 1 }}/{{ quadrasCarrossel.length }}</span>
+    </div>
+  </section>
+
+  <!-- Fallback se não conseguir carregar quadra -->
+  <section class="position-relative mb-5" *ngIf="!quadraDestaque">
+    <div class="bg-light rounded-3 d-flex align-items-center justify-content-center" style="height: 420px;">
+      <div class="text-center text-muted">
+        <i class="bi bi-image display-1"></i>
+        <p class="mt-3">Carregando quadras...</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Conteúdo inferior -->
+  <div class="row">
+    <!-- Minhas Reservas -->
+    <div class="col-md-6 mb-4">
+      <div class="card text-white bg-success shadow">
+        <div class="card-header bg-success d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">Minhas Reservas</h5>
+          <button class="btn btn-light-success btn-sm" (click)="abrirModalTodasReservas()">
+            <i class="bi bi-list-ul me-1"></i>Ver todas
+          </button>
+        </div>
+        <div class="card-body bg-success text-white">
+          <div class="border p-2 mb-2 d-flex justify-content-between align-items-center bg-white text-dark" *ngFor="let reserva of minhasReservas">
+            <div>
+              <p class="mb-1 fw-bold">{{ reserva.quadraNome }}</p>
+              <small>{{ reserva.data }}, {{ formatarHorario(reserva.horaInicio, reserva.horaFim) }}</small><br />
+              <small *ngIf="reserva.membros && reserva.membros.length > 0" class="text-muted">
+                <i class="bi bi-people me-1"></i>{{ reserva.membros.length }} convidado(s)
+              </small>
+              <small *ngIf="!reserva.membros || reserva.membros.length === 0" class="text-muted">
+                <i class="bi bi-person me-1"></i>Sem convidados
+              </small><br />
+              <small class="badge bg-success text-white">Confirmada</small>
+            </div>
+            <div class="d-flex gap-2">
+              <button class="btn btn-edit btn-sm" (click)="editarReserva(reserva.id)">Editar</button>
+              <button class="btn btn-danger btn-sm" (click)="abrirModalConfirmacaoCancelamento(reserva)" 
+                      *ngIf="!isReservaPassada(reserva)">
+                <i class="bi bi-x-circle me-1"></i>Cancelar
+              </button>
+            </div>
+          </div>
+
+          <!-- Mensagem quando não há reservas -->
+          <div *ngIf="minhasReservas.length === 0" class="text-center text-white py-4">
+            <i class="bi bi-calendar-x display-6"></i>
+            <p class="mt-2 mb-0">Nenhuma reserva encontrada</p>
+            <small>Faça sua primeira reserva!</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Calendário -->
+    <div class="col-md-6 mb-4 d-flex justify-content-center align-items-start">
+      <div class="card shadow-sm calendar-card">
+        <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
+          <button class="btn btn-outline-secondary btn-sm" (click)="previousMonth()">
+            <i class="bi bi-chevron-left"></i>
+          </button>
+          <h6 class="mb-0 fw-bold">{{ getCurrentMonthName() }} {{ getCurrentYear() }}</h6>
+          <button class="btn btn-outline-secondary btn-sm" (click)="nextMonth()">
+            <i class="bi bi-chevron-right"></i>
+          </button>
+        </div>
+
+        <div class="card-body p-3">
+          <!-- Cabeçalho dos dias da semana -->
+          <div class="calendar-header">
+            <div class="calendar-header-day" *ngFor="let dayName of dayNames">
+              {{ dayName }}
+            </div>
+          </div>
+
+          <!-- Grade do calendário -->
+          <div class="calendar-grid">
+            <div
+              *ngFor="let dayData of calendarDays"
+              class="calendar-day"
+              [class.current-month]="dayData.isCurrentMonth"
+              [class.today]="dayData.isToday"
+              [class.has-reservation]="dayData.hasReservation"
+              [class.clickable]="dayData.hasReservation"
+              (click)="onDayClick(dayData)"
+            >
+              <span *ngIf="dayData.day">{{ dayData.day }}</span>
+            </div>
+          </div>
+
+          <!-- Legenda -->
+          <div class="row mt-3 small">
+            <div class="col-12">
+              <div class="d-flex justify-content-center gap-3">
+                <div class="d-flex align-items-center">
+                  <div class="legend-box today-legend me-1"></div>
+                  <span>Hoje</span>
+                </div>
+                <div class="d-flex align-items-center">
+                  <div class="legend-box reservation-legend me-1"></div>
+                  <span>Com reserva</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Modal de Detalhes da Reserva -->
+  <div class="modal fade" id="modalReservaDetalhes" tabindex="-1" aria-labelledby="modalReservaDetalhesLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-success text-white">
+          <h5 class="modal-title" id="modalReservaDetalhesLabel">
+            <i class="bi bi-calendar-check me-2"></i>
+            Detalhes da Reserva
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" *ngIf="reservaSelecionada">
+          <div class="card border-0 bg-light">
+            <div class="card-body">
+              <div class="row mb-2">
+                <div class="col-4 text-muted">Usuário:</div>
+                <div class="col-8 fw-bold">{{ reservaSelecionada.usuarioNome }}</div>
+              </div>
+
+              <div class="row mb-2">
+                <div class="col-4 text-muted">Quadra:</div>
+                <div class="col-8 fw-bold">{{ reservaSelecionada.quadraNome }}</div>
+              </div>
+
+              <div class="row mb-2">
+                <div class="col-4 text-muted">Data:</div>
+                <div class="col-8 fw-bold">{{ reservaSelecionada.data }}</div>
+              </div>
+
+              <div class="row mb-2">
+                <div class="col-4 text-muted">Horário:</div>
+                <div class="col-8 fw-bold">{{ formatarHorario(reservaSelecionada.horaInicio, reservaSelecionada.horaFim) }}</div>
+              </div>
+
+              <div class="row mb-0" *ngIf="reservaSelecionada.membros && reservaSelecionada.membros.length > 0">
+                <div class="col-4 text-muted">Membros:</div>
+                <div class="col-8 fw-bold">{{ reservaSelecionada.membros.join(', ') }}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="alert alert-info mt-3 mb-0">
+            <i class="bi bi-info-circle me-2"></i>
+            <small>Chegue 15 minutos antes do horário reservado.</small>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal">Fechar</button>
+          <button type="button" class="btn btn-success" (click)="editarReserva(reservaSelecionada!.id)" *ngIf="reservaSelecionada">
+            <i class="bi bi-pencil me-2"></i>
+            Editar Reserva
+          </button>
+          <button type="button" class="btn btn-danger" (click)="abrirModalConfirmacaoCancelamento(reservaSelecionada!)" 
+                  *ngIf="reservaSelecionada && !isReservaPassada(reservaSelecionada)" data-bs-dismiss="modal">
+            <i class="bi bi-x-circle me-2"></i>
+            Cancelar Reserva
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Edição de Reserva -->
+  <div class="modal fade" id="modalEdicaoReserva" tabindex="-1" aria-labelledby="modalEdicaoReservaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-success text-white">
+          <h5 class="modal-title" id="modalEdicaoReservaLabel">
+            <i class="bi bi-pencil-square me-2"></i>
+            Editar Reserva
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" (click)="fecharModalEdicao()"></button>
+        </div>
+
+        <div class="modal-body" *ngIf="reservaParaEdicao">
+          <!-- Informações da Reserva -->
+          <div class="card bg-light border-0 mb-3">
+            <div class="card-body p-3">
+              <h6 class="mb-2">
+                <i class="bi bi-info-circle me-2"></i>
+                Reserva Atual
+              </h6>
+              <div class="row">
+                <div class="col-6">
+                  <small class="text-muted">Quadra:</small>
+                  <div class="fw-bold">{{ reservaParaEdicao.quadraNome }}</div>
+                </div>
+                <div class="col-6">
+                  <small class="text-muted">Horário:</small>
+                  <div class="fw-bold">{{ formatarHorario(reservaParaEdicao.horaInicio, reservaParaEdicao.horaFim) }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Seleção de Nova Data -->
+          <div class="mb-3">
+            <label class="form-label">
+              <i class="bi bi-calendar3 me-2"></i>
+              Nova Data
+            </label>
+            <input 
+              type="date" 
+              class="form-control" 
+              [(ngModel)]="novaDataReserva"
+              (change)="onDataChange()"
+              [min]="getDataMinima()"
+            />
+          </div>
+
+          <!-- Seleção de Novo Horário -->
+          <div class="mb-3">
+            <label class="form-label">
+              <i class="bi bi-clock me-2"></i>
+              Novo Horário
+            </label>
+
+            <!-- Loading -->
+            <div class="text-center py-3" *ngIf="carregandoHorarios">
+              <div class="spinner-border spinner-border-sm me-2" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <small>Carregando horários...</small>
+            </div>
+
+            <!-- Grid de Horários Compacto -->
+            <div class="row g-2" *ngIf="!carregandoHorarios && horariosDisponiveis.length > 0">
+              <div class="col-6" *ngFor="let horario of horariosDisponiveis">
+                <div
+                  class="btn btn-outline-secondary btn-sm w-100 text-start"
+                  [class.btn-success]="horarioSelecionado === horario"
+                  [class.btn-outline-success]="horarioSelecionado === horario"
+                  [class.disabled]="!horario.disponivel && !isHorarioAtual(horario)"
+                  [class.btn-outline-warning]="isHorarioAtual(horario)"
+                  (click)="selecionarHorario(horario)"
+                >
+                  <small>{{ formatarHorarioCompleto(horario) }}</small>
+                  <div class="small text-muted" *ngIf="isHorarioAtual(horario)">Atual</div>
+                  <div class="small text-muted" *ngIf="!isHorarioAtual(horario) && !horario.disponivel">Ocupado</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mensagem quando não há horários -->
+            <div class="text-center text-muted py-3" *ngIf="!carregandoHorarios && horariosDisponiveis.length === 0">
+              <i class="bi bi-calendar-x"></i>
+              <p class="mb-0 small">Nenhum horário disponível para esta data</p>
+            </div>
+          </div>
+
+          <!-- Gerenciamento de Convidados -->
+          <div class="mb-3">
+            <label class="form-label">
+              <i class="bi bi-people me-2"></i>
+              Convidados
+            </label>
+            
+            <!-- Campo para adicionar convidado -->
+            <div class="row mb-2">
+              <div class="col-8">
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  placeholder="Nome completo do convidado"
+                  [(ngModel)]="nomeConvidadoEdicaoTemp"
+                  (keyup.enter)="adicionarConvidadoEdicao()"
+                >
+              </div>
+              <div class="col-4">
+                <button type="button" class="btn btn-success btn-sm w-100" (click)="adicionarConvidadoEdicao()">
+                  <i class="bi bi-{{ editandoConvidadoEdicaoIndex >= 0 ? 'check' : 'plus' }} me-1"></i>
+                  {{ editandoConvidadoEdicaoIndex >= 0 ? 'Salvar' : 'Adicionar' }}
+                </button>
+              </div>
+            </div>
+
+            <!-- Lista de convidados -->
+            <div *ngIf="convidadosEdicao.length === 0" class="text-center text-muted py-2">
+              <i class="bi bi-person-plus"></i>
+              <small class="d-block">Nenhum convidado adicionado</small>
+            </div>
+
+            <div *ngIf="convidadosEdicao.length > 0" class="border rounded p-2" style="max-height: 150px; overflow-y: auto;">
+              <div *ngFor="let convidado of convidadosEdicao; let i = index" 
+                   class="d-flex justify-content-between align-items-center py-1 px-2 mb-1 bg-light rounded">
+                <div class="d-flex align-items-center">
+                  <i class="bi bi-person text-primary me-2"></i>
+                  <span class="small fw-medium">{{ convidado }}</span>
+                </div>
+                <div class="btn-group btn-group-sm">
+                  <button type="button" class="btn btn-outline-primary btn-sm d-flex align-items-center px-2" 
+                          (click)="editarConvidadoEdicao(i)" title="Editar nome"
+                          style="opacity: 1 !important;">
+                    <i class="bi bi-pencil me-1" style="font-size: 1.1rem; opacity: 1 !important; color: inherit !important;"></i>
+                    <span class="d-none d-md-inline">Editar</span>
+                  </button>
+                  <button type="button" class="btn btn-outline-danger btn-sm d-flex align-items-center px-2" 
+                          (click)="removerConvidadoEdicao(i)" title="Remover convidado"
+                          style="opacity: 1 !important;">
+                    <i class="bi bi-trash me-1" style="font-size: 1.1rem; opacity: 1 !important; color: inherit !important;"></i>
+                    <span class="d-none d-md-inline">Excluir</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <small class="text-muted">
+              <i class="bi bi-info-circle me-1"></i>
+              {{ convidadosEdicao.length }} convidado(s) adicionado(s)
+            </small>
+          </div>
+
+          <!-- Alerta informativo -->
+          <div class="alert alert-info py-2" *ngIf="!carregandoHorarios">
+            <i class="bi bi-info-circle me-2"></i>
+            <small>Selecione uma nova data e horário ou mantenha os atuais.</small>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-success btn-sm" (click)="fecharModalEdicao()">
+            <i class="bi bi-x-circle me-2"></i>
+            Cancelar
+          </button>
+          <button
+            type="button"
+            class="btn btn-success btn-sm"
+            (click)="confirmarEdicao()"
+            [disabled]="!horarioSelecionado || carregandoHorarios"
+          >
+            <i class="bi bi-check-circle me-2"></i>
+            Confirmar Alteração
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Ver Todas as Reservas -->
+  <div class="modal fade" id="modalTodasReservas" tabindex="-1" aria-labelledby="modalTodasReservasLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header bg-success text-white">
+          <h5 class="modal-title" id="modalTodasReservasLabel">
+            <i class="bi bi-calendar-check me-2"></i>
+            Todas as Minhas Reservas
+          </h5>
+          <button class="btn btn-outline-secondary btn-sm ms-3" (click)="carregarTodasReservas()" title="Atualizar reservas">
+            <i class="bi bi-arrow-clockwise"></i> Atualizar
+          </button>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Filtros -->
+          <div class="row mb-4">
+            <div class="col-md-6">
+              <label class="form-label">Filtrar por status:</label>
+              <select class="form-select" [(ngModel)]="filtroStatus" (change)="aplicarFiltros()">
+                <option value="">Todos</option>
+                <option value="ativas">Reservas Ativas</option>
+                <option value="cancelada">Reservas Canceladas</option>
+              </select>
+              <button class="btn btn-outline-secondary btn-sm mt-2 ms-2" (click)="filtroStatus='';aplicarFiltros()">
+                <i class="bi bi-x-circle"></i> Limpar filtro canceladas
+              </button>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Filtrar por período:</label>
+              <select class="form-select" [(ngModel)]="filtroPeriodo" (change)="aplicarFiltros()">
+                <option value="">Todas</option>
+                <option value="futuras">Próximas reservas</option>
+                <option value="passadas">Reservas passadas</option>
+                <option value="hoje">Hoje</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Lista de reservas -->
+          <div *ngIf="todasReservasFiltradas.length > 0">
+            <div class="card mb-3" *ngFor="let reserva of todasReservasFiltradas">
+              <div class="card-body">
+                <div class="row align-items-center">
+                  <div class="col-md-8">
+                    <h6 class="card-title mb-1">{{ reserva.quadraNome }}</h6>
+                    <p class="card-text mb-1">
+                      <i class="bi bi-calendar3 me-2"></i>{{ reserva.data }}
+                      <i class="bi bi-clock ms-3 me-2"></i>{{ formatarHorario(reserva.horaInicio, reserva.horaFim) }}
+                    </p>
+                    <p class="card-text mb-1">
+                      <i class="bi bi-people me-2"></i>
+                      <span *ngIf="reserva.membros && reserva.membros.length > 0">
+                        {{ reserva.membros.length }} convidado(s)
+                      </span>
+                      <span *ngIf="!reserva.membros || reserva.membros.length === 0">
+                        Sem convidados
+                      </span>
+                    </p>
+                    
+                    <!-- Status da reserva -->
+                    <div class="mb-2">
+                      <span class="badge" 
+                            [class.bg-success]="!reserva.cancelada && reserva.status === 'confirmada'" 
+                            [class.bg-warning]="!reserva.cancelada && reserva.status === 'pendente'"
+                            [class.bg-danger]="reserva.cancelada">
+                        {{ reserva.cancelada ? 'Cancelada' : (reserva.status | titlecase) }}
+                      </span>
+                    </div>
+
+                    <!-- Motivo do cancelamento se foi cancelada por admin -->
+                    <div *ngIf="reserva.cancelada && getMotivoCancelamento(reserva)" class="alert alert-warning py-2 mb-2">
+                      <div class="d-flex align-items-start">
+                        <i class="bi bi-exclamation-triangle-fill text-warning me-2 mt-1"></i>
+                        <div>
+                          <strong>Cancelada pelo administrador:</strong><br>
+                          <span class="text-dark">{{ getMotivoCancelamento(reserva) }}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Indicação se foi cancelada pelo próprio associado -->
+                    <div *ngIf="reserva.cancelada && reserva.canceladaPor === 'associado'" class="alert alert-info py-2 mb-2">
+                      <i class="bi bi-info-circle-fill me-2"></i>
+                      <span>Cancelada por você</span>
+                    </div>
+                  </div>
+                  <div class="col-md-4 text-end">
+                    <div class="btn-group-vertical" *ngIf="!reserva.cancelada && reserva.status === 'confirmada' && !isReservaPassada(reserva)">
+                      <button class="btn btn-outline-primary btn-sm mb-2" (click)="editarReservaDoModal(reserva.id)">
+                        <i class="bi bi-pencil me-1"></i>Editar
+                      </button>
+                      <button class="btn btn-outline-danger btn-sm" (click)="abrirModalConfirmacaoCancelamento(reserva)">
+                        <i class="bi bi-x-circle me-1"></i>Cancelar
+                      </button>
+                    </div>
+                    <small class="text-muted" *ngIf="isReservaPassada(reserva)">
+                      Reserva realizada
+                    </small>
+                    <small class="text-muted" *ngIf="reserva.cancelada">
+                      Reserva cancelada
+                    </small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mensagem quando não há reservas -->
+          <div *ngIf="todasReservasFiltradas.length === 0" class="text-center py-5">
+            <i class="bi bi-calendar-x display-1 text-muted"></i>
+            <h4 class="mt-3 text-muted">Nenhuma reserva encontrada</h4>
+            <p class="text-muted">{{ getFiltroMensagem() }}</p>
+            <button class="btn btn-success mt-3" (click)="navegarParaQuadras()">
+              <i class="bi bi-plus-circle me-2"></i>Fazer nova reserva
+            </button>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Confirmação de Cancelamento -->
+<div class="modal fade" id="modalConfirmacaoCancelamento" tabindex="-1" aria-labelledby="modalConfirmacaoCancelamentoLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="modalConfirmacaoCancelamentoLabel">
+          <i class="bi bi-exclamation-triangle me-2"></i>
+          Confirmar Cancelamento
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" *ngIf="reservaParaCancelar">
+        <p class="mb-3">Tem certeza que deseja cancelar a reserva?</p>
+        
+        <div class="card bg-light border-0 mb-3">
+          <div class="card-body p-3">
+            <div class="row mb-2">
+              <div class="col-4 text-muted">Quadra:</div>
+              <div class="col-8 fw-bold">{{ reservaParaCancelar.quadraNome }}</div>
+            </div>
+            <div class="row mb-2">
+              <div class="col-4 text-muted">Data:</div>
+              <div class="col-8 fw-bold">{{ reservaParaCancelar.data }}</div>
+            </div>
+            <div class="row mb-0">
+              <div class="col-4 text-muted">Horário:</div>
+              <div class="col-8 fw-bold">{{ formatarHorario(reservaParaCancelar.horaInicio, reservaParaCancelar.horaFim) }}</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="alert alert-warning">
+          <i class="bi bi-exclamation-triangle me-2"></i>
+          <strong>Atenção:</strong> Esta ação não pode ser desfeita.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+          Cancelar
+        </button>
+        <button type="button" class="btn btn-danger" (click)="confirmarCancelamentoReserva()">
+          <i class="bi bi-x-circle me-2"></i>
+          Sim, Cancelar Reserva
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Sucesso Cancelamento -->
+<div class="modal fade" id="modalSucessoCancelamento" tabindex="-1" aria-labelledby="modalSucessoCancelamentoLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title" id="modalSucessoCancelamentoLabel">
+          <i class="bi bi-check-circle me-2"></i>
+          Cancelamento Realizado
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <div class="mb-3">
+          <i class="bi bi-check-circle-fill text-success" style="font-size: 3rem;"></i>
+        </div>
+        <h4 class="text-success mb-3">Reserva Cancelada com Sucesso!</h4>
+        <p class="text-muted">
+          Sua reserva foi cancelada e você não será cobrado por ela. 
+          Você pode fazer uma nova reserva a qualquer momento.
+        </p>
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-success" data-bs-dismiss="modal">
+          <i class="bi bi-check me-2"></i>
+          Entendi
+        </button>
+        <button type="button" class="btn btn-outline-success" (click)="navegarParaQuadras()" data-bs-dismiss="modal">
+          <i class="bi bi-plus-circle me-2"></i>
+          Fazer Nova Reserva
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Erro Cancelamento -->
+<div class="modal fade" id="modalErroCancelamento" tabindex="-1" aria-labelledby="modalErroCancelamentoLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="modalErroCancelamentoLabel">
+          <i class="bi bi-exclamation-triangle me-2"></i>
+          Erro no Cancelamento
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <div class="mb-3">
+          <i class="bi bi-x-circle-fill text-danger" style="font-size: 3rem;"></i>
+        </div>
+        <h4 class="text-danger mb-3">Não foi possível cancelar a reserva</h4>
+        <p class="text-muted">
+          Ocorreu um erro ao tentar cancelar sua reserva. 
+          Por favor, tente novamente ou entre em contato com o suporte.
+        </p>
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+          <i class="bi bi-x me-2"></i>
+          Fechar
+        </button>
+        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">
+          <i class="bi bi-arrow-repeat me-2"></i>
+          Tentar Novamente
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Rodapé recriado do zero, sempre no final da página -->
+<footer class="footer mt-auto py-4 bg-dark text-light border-top" style="position:relative; width:100%;">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 mb-3 mb-md-0">
+        <h6 class="fw-bold text-success">Nossos Esportes</h6>
+        <ul class="list-unstyled mb-0">
+          <li><i class="bi bi-check-circle text-success me-2"></i>Futebol</li>
+          <li><i class="bi bi-check-circle text-success me-2"></i>Vôlei</li>
+          <li><i class="bi bi-check-circle text-success me-2"></i>Tênis</li>
+          <li><i class="bi bi-check-circle text-success me-2"></i>Basquete</li>
+        </ul>
+      </div>
+      <div class="col-md-4 mb-3 mb-md-0">
+        <h6 class="fw-bold text-success">Facilidades</h6>
+        <ul class="list-unstyled mb-0">
+          <li><i class="bi bi-check-circle text-success me-2"></i>Vestiários completos</li>
+          <li><i class="bi bi-check-circle text-success me-2"></i>Estacionamento</li>
+          <li><i class="bi bi-check-circle text-success me-2"></i>Segurança 24h</li>
+          <li><i class="bi bi-check-circle text-success me-2"></i>Equipamentos inclusos</li>
+        </ul>
+      </div>
+      <div class="col-md-4">
+        <h6 class="fw-bold text-success">Horário de Funcionamento</h6>
+        <ul class="list-unstyled mb-0">
+          <li><i class="bi bi-clock text-success me-2"></i>Segunda a Sexta: 6h às 22h</li>
+          <li><i class="bi bi-clock text-success me-2"></i>Sábado: 7h às 20h</li>
+          <li><i class="bi bi-clock text-success me-2"></i>Domingo: 8h às 18h</li>
+        </ul>
+      </div>
+    </div>
+    <hr class="bg-light opacity-50 my-3" />
+    <div class="row">
+      <div class="col text-center small">
+        &copy; 2025 Clube Esportivo. Todos os direitos reservados.
+      </div>
+    </div>
+  </div>
+</footer>
+<!-- Removido fechamento extra de div -->

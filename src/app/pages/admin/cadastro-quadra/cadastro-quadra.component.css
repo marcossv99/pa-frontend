@@ -1,0 +1,206 @@
+/* Navbar Links */
+.nav-link {
+  color: #000;
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: green;
+  text-decoration: underline;
+}
+
+/* Header Image */
+.header-image {
+  position: relative;
+  overflow: hidden;
+}
+
+.header-image img,
+.header-img-custom {
+  height: 180px !important;
+  object-fit: cover;
+  border-radius: 2px !important;
+}
+
+.header-image h1 {
+  font-size: 3rem;
+}
+
+/* Botões */
+.btn {
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+.btn-cadastrar {
+  font-size: 0.85rem;
+  padding: 0.15rem 0.6rem;
+  border-radius: 2px !important;
+  height: 38px;
+  min-width: 160px;
+  width: 180px;
+  margin: 0 auto;
+  display: block;
+}
+
+.btn-voltar {
+  font-size: 0.85rem;
+  padding: 0.2rem 0.8rem;
+  border-radius: 2px !important;
+  width: 120px;
+  align-self: flex-end;
+}
+
+/* Input Fields */
+.form-control {
+  font-size: 0.85rem;
+  padding: 0.18rem 0.5rem;
+  border-radius: 2px !important;
+  height: 36px;
+  max-width: 260px;
+  border: 1px solid green;
+  border-color: #28a745;
+  box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+  margin: 0 auto;
+}
+
+/* Image Upload Box */
+.image-upload {
+  background-color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.image-upload:hover {
+  background-color: #f0f0f0;
+}
+
+/* Footer Links */
+footer ul li {
+  margin-bottom: 0.5rem;
+}
+
+.img-thumbnail {
+  border-radius: 2px !important;
+  max-height: 80px !important;
+}
+
+.card.bg-light.p-4 form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card.bg-light.p-4 form .mb-3,
+.card.bg-light.p-4 form .d-grid {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.inputs-row {
+  display: flex;
+  flex-direction: row;
+  gap: 18px;
+  justify-content: center;
+  width: 100%;
+}
+
+.inputs-row .mb-3 {
+  width: 180px;
+  margin-bottom: 0;
+}
+
+.botoes-row {
+  display: flex !important;
+  flex-direction: row;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.btn-cadastrar,
+.btn-voltar {
+  display: inline-block;
+  margin: 0;
+}
+
+/* ========== BOTÕES PADRONIZADOS ========== */
+
+/* Botão Success */
+.btn-success {
+  background: linear-gradient(135deg, #28CB8B 0%, #24B77A 100%) !important;
+  border: none !important;
+  color: white !important;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-success:hover,
+.btn-success:focus,
+.btn-success:active {
+  background: linear-gradient(135deg, #24B77A 0%, #28CB8B 100%) !important;
+  color: white !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(40, 203, 139, 0.3);
+}
+
+/* Botão Cadastrar com cores padronizadas */
+.btn-cadastrar.btn-success {
+  background: linear-gradient(135deg, #28CB8B 0%, #24B77A 100%) !important;
+  border: none !important;
+  color: white !important;
+}
+
+.btn-cadastrar.btn-success:hover,
+.btn-cadastrar.btn-success:focus,
+.btn-cadastrar.btn-success:active {
+  background: linear-gradient(135deg, #24B77A 0%, #28CB8B 100%) !important;
+  color: white !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(40, 203, 139, 0.3);
+}
+
+/* Botão Outline Secondary */
+.btn-outline-secondary {
+  background: white !important;
+  border: 2px solid #6c757d !important;
+  color: #6c757d !important;
+  border-radius: 2px !important;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-secondary:hover,
+.btn-outline-secondary:focus,
+.btn-outline-secondary:active {
+  background: #6c757d !important;
+  border-color: #6c757d !important;
+  color: white !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(108, 117, 125, 0.3);
+}
+
+/* Botão Voltar com cores padronizadas */
+.btn-voltar.btn-outline-secondary {
+  background: white !important;
+  border: 2px solid #6c757d !important;
+  color: #6c757d !important;
+}
+
+.btn-voltar.btn-outline-secondary:hover,
+.btn-voltar.btn-outline-secondary:focus,
+.btn-voltar.btn-outline-secondary:active {
+  background: #6c757d !important;
+  border-color: #6c757d !important;
+  color: white !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(108, 117, 125, 0.3);
+}
+
+/* ========== FIM DOS BOTÕES PADRONIZADOS ========== */

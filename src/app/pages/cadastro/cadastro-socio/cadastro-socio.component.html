@@ -1,70 +1,159 @@
 <div class="container d-flex justify-content-center align-items-center min-vh-100 bg-light">
-    <div class="w-100" style="max-width: 900px">
-        <!-- Título -->
-        <h2 class="text-center fw-bold mb-5">Cadastro de Sócio</h2>
-
-        <!-- Formulário em 2 colunas -->
-        <form #form="ngForm">
-            <div class="row g-4">
-                <!-- Nome completo -->
-                <div class="col-md-6">
-                    <label class="form-label fw-bold fs-5">Nome completo</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Informe seu nome completo"
-                            [(ngModel)]="dadosCadastro.nomeCompleto" name="nomeCompleto" required />
-                        <span class="input-group-text" *ngIf="dadosCadastro.nomeCompleto"
-                            (click)="limparCampo('nomeCompleto')" style="cursor: pointer">
-                            <i class="bi bi-x-circle"></i>
-                        </span>
-                    </div>
-                </div>
-
-                <!-- CPF -->
-                <div class="col-md-6">
-                    <label class="form-label fw-bold fs-5">CPF</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Informe seu CPF"
-                            [(ngModel)]="dadosCadastro.cpf" name="cpf" required />
-                        <span class="input-group-text" *ngIf="dadosCadastro.cpf" (click)="limparCampo('cpf')"
-                            style="cursor: pointer">
-                            <i class="bi bi-x-circle"></i>
-                        </span>
-                    </div>
-                </div>
-
-                <!-- Telefone -->
-                <div class="col-md-6">
-                    <label class="form-label fw-bold fs-5">Telefone</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Informe seu telefone"
-                            [(ngModel)]="dadosCadastro.telefone" name="telefone" required />
-                        <span class="input-group-text" *ngIf="dadosCadastro.telefone" (click)="limparCampo('telefone')"
-                            style="cursor: pointer">
-                            <i class="bi bi-x-circle"></i>
-                        </span>
-                    </div>
-                </div>
-
-                <!-- Email -->
-                <div class="col-md-6">
-                    <label class="form-label fw-bold fs-5">Email</label>
-                    <div class="input-group">
-                        <input type="email" class="form-control" placeholder="Informe seu email"
-                            [(ngModel)]="dadosCadastro.email" name="email" required />
-                        <span class="input-group-text" *ngIf="dadosCadastro.email" (click)="limparCampo('email')"
-                            style="cursor: pointer">
-                            <i class="bi bi-x-circle"></i>
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Botão Próximo -->
-            <div class="text-center mt-5">
-                <button class="btn btn-success px-5 py-2" (click)="proximoPasso()" [disabled]="!form.valid">
-                    Próximo
-                </button>
-            </div>
-        </form>
+  <div class="w-100" style="max-width: 900px">
+    <!-- Título -->
+    <div class="text-center mb-5">
+      <h1 class="fw-bold text-success">
+        <i class="bi bi-person-plus me-2"></i>
+        Cadastro de Sócio
+      </h1>
+      <p class="text-muted">Preencha os dados para criar sua conta no sistema</p>
     </div>
+
+    <!-- Formulário em Card -->
+    <div class="card shadow-lg border-0">
+      <div class="card-header bg-success text-white">
+        <h5 class="card-title mb-0">
+          <i class="bi bi-person-circle me-2"></i>
+          Seus Dados Pessoais
+        </h5>
+      </div>
+      <div class="card-body p-4">
+        <form #form="ngForm" (ngSubmit)="proximoPasso()">
+          <div class="row g-4">
+            <!-- Nome completo -->
+            <div class="col-md-6">
+              <label class="form-label fw-bold">Nome completo *</label>
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="bi bi-person"></i>
+                </span>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  placeholder="Informe seu nome completo"
+                  [(ngModel)]="dadosCadastro.nome" 
+                  name="nome" 
+                  required
+                  [class.is-invalid]="dadosCadastro.nome && dadosCadastro.nome.trim().length < 2"
+                />
+                <button 
+                  type="button"
+                  class="btn btn-outline-secondary" 
+                  *ngIf="dadosCadastro.nome"
+                  (click)="limparCampo('nome')"
+                >
+                  <i class="bi bi-x"></i>
+                </button>
+              </div>
+              <div *ngIf="dadosCadastro.nome && dadosCadastro.nome.trim().length < 2" class="invalid-feedback">
+                Nome deve ter pelo menos 2 caracteres
+              </div>
+            </div>
+
+            <!-- CPF -->
+            <div class="col-md-6">
+              <label class="form-label fw-bold">CPF *</label>
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="bi bi-card-text"></i>
+                </span>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  placeholder="000.000.000-00"
+                  [(ngModel)]="dadosCadastro.cpf" 
+                  name="cpf" 
+                  required
+                  (ngModelChange)="dadosCadastro.cpf = formatarCpf(dadosCadastro.cpf)"
+                />
+                <button 
+                  type="button"
+                  class="btn btn-outline-secondary" 
+                  *ngIf="dadosCadastro.cpf" 
+                  (click)="limparCampo('cpf')"
+                >
+                  <i class="bi bi-x"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div class="col-md-6">
+              <label class="form-label fw-bold">Email *</label>
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="bi bi-envelope"></i>
+                </span>
+                <input 
+                  type="email" 
+                  class="form-control" 
+                  placeholder="seu@email.com"
+                  [(ngModel)]="dadosCadastro.email" 
+                  name="email" 
+                  required
+                  [class.is-invalid]="dadosCadastro.email && !emailValido(dadosCadastro.email)"
+                />
+                <button 
+                  type="button"
+                  class="btn btn-outline-secondary" 
+                  *ngIf="dadosCadastro.email" 
+                  (click)="limparCampo('email')"
+                >
+                  <i class="bi bi-x"></i>
+                </button>
+              </div>
+              <div *ngIf="dadosCadastro.email && !emailValido(dadosCadastro.email)" class="invalid-feedback">
+                Email inválido
+              </div>
+            </div>
+
+            <!-- Telefone -->
+            <div class="col-md-6">
+              <label class="form-label fw-bold">Telefone *</label>
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="bi bi-telephone"></i>
+                </span>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  placeholder="(00) 00000-0000"
+                  [(ngModel)]="dadosCadastro.telefone" 
+                  name="telefone" 
+                  required
+                  (ngModelChange)="dadosCadastro.telefone = formatarTelefone(dadosCadastro.telefone)"
+                />
+                <button 
+                  type="button"
+                  class="btn btn-outline-secondary" 
+                  *ngIf="dadosCadastro.telefone" 
+                  (click)="limparCampo('telefone')"
+                >
+                  <i class="bi bi-x"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Info sobre próxima etapa -->
+          <div class="alert alert-info mt-4">
+            <i class="bi bi-info-circle me-2"></i>
+            <strong>Próxima etapa:</strong> Você será direcionado para criar e confirmar sua senha para finalizar o cadastro.
+          </div>
+
+          <!-- Botões -->
+          <div class="text-center mt-4">
+            <button 
+              type="submit" 
+              class="btn btn-success px-5 py-3" 
+              [disabled]="!form.valid"
+            >
+              <i class="bi bi-arrow-right me-2"></i>
+              Próximo
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>

@@ -1,0 +1,447 @@
+
+<div class="container-fluid p-4">
+  <!-- Navbar simplificada -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <nav>
+      <ul class="nav">
+        <li class="nav-item"><a class="nav-link" (click)="navegarParaHome()" style="cursor: pointer;">Home</a></li>
+        <li class="nav-item"><a class="nav-link" (click)="abrirModalTodasReservas()" style="cursor: pointer;">Reservas</a></li>
+        <li class="nav-item"><a class="nav-link" (click)="navegarParaPerfil()" style="cursor: pointer;">Perfil</a></li>
+      </ul>
+    </nav>
+  </div>
+  <!-- Header -->
+  <div class="d-flex align-items-center mb-4">
+    <button class="btn btn-outline-success me-3" (click)="voltar()">
+      <i class="bi bi-arrow-left"></i> Voltar
+    </button>
+    <h2 class="mb-0 fw-bold text-success">Reserve sua Quadra</h2>
+  </div>
+
+  <div class="row" *ngIf="quadra">
+    <!-- Informações da Quadra -->
+    <div class="col-lg-5 mb-4">
+      <div class="card shadow">
+        <img [src]="getImageUrl(quadra.img)" class="card-img-top" style="height: 250px; object-fit: cover;" [alt]="'Quadra ' + quadra.numero" (error)="onImageError($event, quadra.img)">
+        <div class="card-body">
+          <h4 class="card-title fw-bold">Quadra {{ quadra.numero }}</h4>
+          <p class="badge bg-primary mb-3">{{ quadra.modalidade }}</p>
+          <p class="card-text text-muted">Quadra disponível para reserva de {{ quadra.modalidade.toLowerCase() }}.</p>
+
+          <div class="row mb-3">
+            <div class="col-6">
+              <small class="text-muted">Capacidade</small>
+              <p class="fw-bold mb-0">{{ quadra.qtdPessoas }} pessoas</p>
+            </div>
+            <div class="col-6">
+              <small class="text-muted">Modalidade</small>
+              <p class="fw-bold mb-0 text-success">{{ quadra.modalidade }}</p>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <small class="text-muted">Equipamentos disponíveis</small>
+            <div class="mt-2">
+              <span class="badge bg-light text-dark me-1 mb-1">Iluminação</span>
+              <span class="badge bg-light text-dark me-1 mb-1">Vestiários</span>
+              <span class="badge bg-light text-dark me-1 mb-1">Chuveiros</span>
+              <span class="badge bg-light text-dark me-1 mb-1">Estacionamento</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Seleção de Data e Horários -->
+    <div class="col-lg-7 mb-4">
+      <div class="card shadow">
+        <div class="card-header bg-success text-white">
+          <h5 class="mb-0">Selecione Data e Horários</h5>
+        </div>
+        <div class="card-body">
+          <!-- Dados do usuário -->
+          <div class="row mb-4">
+            <div class="col-md-6 mb-3">
+              <label for="nomeCompleto" class="form-label fw-bold">Nome completo</label>
+              <input
+                type="text"
+                id="nomeCompleto"
+                class="form-control"
+                placeholder="Informe seu nome"
+                [(ngModel)]="nomeCompleto"
+                disabled
+              >
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="quantidadeConvidados" class="form-label fw-bold">
+                Número de convidados 
+                <small class="text-muted">(máx: {{ getMaximoConvidados() }})</small>
+              </label>
+              <select
+                id="quantidadeConvidados"
+                class="form-select"
+                [(ngModel)]="quantidadeConvidados"
+                (change)="onQuantidadeConvidadosChange()"
+              >
+                <option [value]="opcao" *ngFor="let opcao of getOpcoesQuantidadeConvidados()">
+                  {{ opcao === 0 ? 'Nenhum convidado' : opcao + (opcao === 1 ? ' convidado' : ' convidados') }}
+                </option>
+              </select>
+              
+              <!-- Lista de convidados adicionados -->
+              <div *ngIf="convidados.length > 0" class="mt-2">
+                <small class="text-muted d-block mb-1">Convidados adicionados:</small>
+                <div class="d-flex flex-wrap gap-1">
+                  <span *ngFor="let convidado of convidados; let i = index" 
+                        class="badge bg-primary d-flex align-items-center gap-1">
+                    {{ convidado }}
+                    <button type="button" class="btn-close btn-close-white" 
+                            [style.font-size]="'0.6em'" 
+                            (click)="removerConvidado(i)"
+                            title="Remover convidado"></button>
+                  </span>
+                </div>
+                <button type="button" class="btn btn-outline-primary btn-sm mt-1" 
+                        (click)="abrirModalConvidados()">
+                  <i class="fas fa-edit"></i> Editar lista
+                </button>
+              </div>
+              
+              <!-- Indicador de convidados faltando -->
+              <div *ngIf="quantidadeConvidados > 0 && !isListaConvidadosCompleta()" 
+                   class="mt-2">
+                <small class="text-warning d-block mb-2">
+                  <i class="fas fa-exclamation-triangle"></i>
+                  Faltam {{ getConvidadosFaltando() }} convidado(s) para completar a lista
+                </small>
+                <button type="button" class="btn btn-primary btn-sm" 
+                        (click)="abrirModalConvidados()">
+                  <i class="fas fa-user-plus"></i> Adicionar convidados
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Seletor de Data -->
+          <div class="mb-4">
+            <label for="dataSelecionada" class="form-label fw-bold">Data da Reserva</label>
+            <input
+              type="date"
+              id="dataSelecionada"
+              class="form-control form-control-lg"
+              [(ngModel)]="dataSelecionada"
+              (change)="onDataChange($event)"
+              [min]="dataMinima"
+            >
+          </div>
+
+          <!-- Grade de Horários -->
+          <div class="mb-4">
+            <h6 class="fw-bold mb-3">Horários Disponíveis</h6>
+            
+            <!-- Nota informativa -->
+            <div class="alert alert-info py-2 mb-3">
+              <div class="d-flex align-items-start">
+                <i class="bi bi-info-circle-fill me-2 mt-1"></i>
+                <div class="small">
+                  <strong>Regras de Reserva:</strong>
+                  <ul class="mb-0 mt-1">
+                    <li>Você pode selecionar apenas <strong>um horário</strong> por reserva</li>
+                    <li>Só é permitida <strong>uma reserva por tipo de quadra por dia</strong> (Ex: apenas 1 reserva de Futebol por dia)</li>
+                    <li><strong>Não é possível</strong> reservar a mesma quadra no mesmo horário que outro usuário</li>
+                    <li>Para selecionar outro horário, primeiro desmarque o atual</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            
+            <div class="row g-2">
+              <div class="col-6 col-md-4 col-lg-3" *ngFor="let horario of horarios">
+                <button
+                  class="btn w-100 horario-btn"
+                  [class.btn-outline-secondary]="!horario.disponivel"
+                  [class.btn-outline-success]="horario.disponivel && !isHorarioSelecionado(horario.id)"
+                  [ngClass]="{'horario-selecionado': horario.disponivel && isHorarioSelecionado(horario.id)}"
+                  [disabled]="!horario.disponivel"
+                  (click)="toggleHorario(horario.id)"
+                >
+                  <div class="small fw-bold">{{ horario.hora }}</div>
+                </button>
+              </div>
+            </div>
+
+            <!-- Legenda -->
+            <div class="mt-3 small">
+              <div class="d-flex flex-wrap gap-3">
+                <div class="d-flex align-items-center">
+                  <div class="btn btn-outline-success btn-sm me-2" style="width: 20px; height: 20px;"></div>
+                  <span>Disponível</span>
+                </div>
+                <div class="d-flex align-items-center">
+                  <div class="btn btn-success btn-sm me-2" style="width: 20px; height: 20px;"></div>
+                  <span>Selecionado</span>
+                </div>
+                <div class="d-flex align-items-center">
+                  <div class="btn btn-outline-secondary btn-sm me-2" style="width: 20px; height: 20px;"></div>
+                  <span>Indisponível</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Resumo da Reserva -->
+          <div class="border-top pt-4">
+            <h6 class="fw-bold">Resumo da Reserva</h6>
+            <div class="bg-light p-3 rounded">
+              <div class="row mb-2">
+                <div class="col-4 text-muted">Nome:</div>
+                <div class="col-8 fw-bold">{{ nomeCompleto || 'Não informado' }}</div>
+              </div>
+              <div class="row mb-2">
+                <div class="col-4 text-muted">Convidados:</div>
+                <div class="col-8 fw-bold">{{ quantidadeConvidados ? quantidadeConvidados + ' pessoa(s)' : 'Não informado' }}</div>
+              </div>
+              <div class="row mb-2">
+                <div class="col-4 text-muted">Quadra:</div>
+                <div class="col-8 fw-bold">{{ ('Quadra ' + quadra.numero) || 'Não selecionada' }}</div>
+              </div>
+              <div class="row mb-2">
+                <div class="col-4 text-muted">Data:</div>
+                <div class="col-8 fw-bold">{{ dataSelecionada || 'Não selecionada' }}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-4 text-muted">Horários:</div>
+                <div class="col-8 fw-bold">{{ getHorariosSelecionadosTexto() || 'Nenhum horário selecionado' }}</div>
+              </div>
+
+              <button
+                class="btn btn-lg w-100"
+                [class.btn-success]="isReservaCompleta()"
+                [class.btn-outline-success]="!isReservaCompleta()"
+                [disabled]="!isReservaCompleta()"
+                (click)="confirmarReserva()"
+              >
+                <i class="bi bi-check-circle me-2"></i>
+                {{ isReservaCompleta() ? 'Confirmar Reserva' : 'Preencha todos os dados' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Gerenciar Convidados -->
+  <div class="modal fade" [class.show]="mostrarModalConvidados" [style.display]="mostrarModalConvidados ? 'block' : 'none'" 
+       tabindex="-1" aria-labelledby="modalConvidadosLabel" [attr.aria-hidden]="!mostrarModalConvidados">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title" id="modalConvidadosLabel">
+            <i class="fas fa-users me-2"></i>
+            Gerenciar Lista de Convidados
+          </h5>
+          <button type="button" class="btn-close btn-close-white" (click)="fecharModalConvidados()" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row mb-3">
+            <div class="col-md-8">
+              <label for="nomeConvidado" class="form-label fw-bold">
+                {{ editandoConvidadoIndex >= 0 ? 'Editar nome do convidado' : 'Nome do convidado' }}
+              </label>
+              <input
+                type="text"
+                id="nomeConvidado"
+                class="form-control"
+                placeholder="Digite o nome completo do convidado"
+                [(ngModel)]="nomeConvidadoTemp"
+                (keyup.enter)="adicionarConvidado()"
+                #nomeConvidadoInput
+              >
+            </div>
+            <div class="col-md-4 d-flex align-items-end">
+              <button type="button" class="btn btn-success w-100" (click)="adicionarConvidado()">
+                <i class="fas fa-{{ editandoConvidadoIndex >= 0 ? 'save' : 'plus' }} me-1"></i>
+                {{ editandoConvidadoIndex >= 0 ? 'Salvar' : 'Adicionar' }}
+              </button>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h6 class="mb-0">Lista de Convidados ({{ convidados.length }}/{{ quantidadeConvidados }})</h6>
+              <div class="d-flex gap-2">
+                <span class="badge bg-secondary">
+                  {{ getConvidadosFaltando() > 0 ? 'Faltam ' + getConvidadosFaltando() : 'Completa' }}
+                </span>
+                <span class="badge" [class]="podeConfirmarLista ? 'bg-success' : 'bg-warning'">
+                  {{ podeConfirmarLista ? 'Pronto' : 'Pendente' }}
+                </span>
+              </div>
+            </div>
+
+            <div *ngIf="convidados.length === 0" class="text-center text-muted py-3">
+              <i class="fas fa-user-plus fa-2x mb-2"></i>
+              <p class="mb-0">Nenhum convidado adicionado ainda.</p>
+              <small>Adicione os nomes dos convidados acima.</small>
+            </div>
+
+            <div *ngIf="convidados.length > 0" class="list-group">
+              <div *ngFor="let convidado of convidados; let i = index" 
+                   class="list-group-item d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                  <i class="fas fa-user text-primary me-2"></i>
+                  <span class="fw-medium">{{ convidado }}</span>
+                </div>
+                <div class="btn-group btn-group-sm">
+                  <button type="button" class="btn btn-outline-primary d-flex align-items-center px-2" 
+                          (click)="editarConvidado(i)" title="Editar nome"
+                          style="opacity: 1 !important;">
+                    <i class="fas fa-edit me-1" style="font-size: 1.1rem; opacity: 1 !important; color: inherit !important;"></i>
+                    <span class="d-none d-md-inline">Editar</span>
+                  </button>
+                  <button type="button" class="btn btn-outline-danger d-flex align-items-center px-2" 
+                          (click)="removerConvidado(i)" title="Remover convidado"
+                          style="opacity: 1 !important;">
+                    <i class="fas fa-trash me-1" style="font-size: 1.1rem; opacity: 1 !important; color: inherit !important;"></i>
+                    <span class="d-none d-md-inline">Excluir</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle me-2"></i>
+            <strong>Importante:</strong> Certifique-se de que todos os convidados tenham conhecimento da reserva. 
+            O limite de pessoas para esta quadra é de <strong>{{ quadra?.qtdPessoas }} pessoas</strong> 
+            (incluindo você e os convidados).
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-success" (click)="fecharModalConvidados()">
+            Cancelar
+          </button>
+          <button type="button" class="btn btn-success" 
+                  [disabled]="!podeConfirmarLista" 
+                  (click)="fecharModalConvidados()">
+            <i class="fas fa-check me-1"></i>
+            Confirmar Lista
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Backdrop do modal quando mostrarModalConvidados estiver true -->
+  <div *ngIf="mostrarModalConvidados" class="modal-backdrop fade show"></div>
+
+  <!-- Modal de Confirmação -->
+  <div class="modal fade" id="modalConfirmacao" tabindex="-1" aria-labelledby="modalConfirmacaoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-success text-white">
+          <h5 class="modal-title" id="modalConfirmacaoLabel">
+            <i class="bi bi-check-circle me-2"></i>
+            Reserva Confirmada!
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="text-center mb-4">
+            <i class="bi bi-check-circle-fill text-success" style="font-size: 3rem;"></i>
+            <h6 class="mt-3 mb-0">Sua reserva foi confirmada com sucesso!</h6>
+          </div>
+
+          <div class="card border-0 bg-light">
+            <div class="card-body">
+              <h6 class="card-title fw-bold mb-3">Detalhes da Reserva</h6>
+
+              <div class="row mb-2">
+                <div class="col-4 text-muted">Nome:</div>
+                <div class="col-8 fw-bold">{{ reservaConfirmada?.nome }}</div>
+              </div>
+
+              <div class="row mb-2">
+                <div class="col-4 text-muted">Convidados:</div>
+                <div class="col-8 fw-bold">
+                  <span *ngIf="reservaConfirmada?.convidados?.length === 0">Nenhum convidado</span>
+                  <span *ngIf="reservaConfirmada?.convidados?.length! > 0">
+                    {{ reservaConfirmada?.convidados?.join(', ') }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="row mb-2">
+                <div class="col-4 text-muted">Quadra:</div>
+                <div class="col-8 fw-bold">{{ reservaConfirmada?.quadraNome }}</div>
+              </div>
+
+              <div class="row mb-2">
+                <div class="col-4 text-muted">Data:</div>
+                <div class="col-8 fw-bold">{{ reservaConfirmada?.data }}</div>
+              </div>
+
+              <div class="row mb-0">
+                <div class="col-4 text-muted">Horários:</div>
+                <div class="col-8 fw-bold">{{ reservaConfirmada?.horarios }}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="alert alert-info mt-3 mb-0">
+            <i class="bi bi-info-circle me-2"></i>
+            <small>Você receberá um e-mail de confirmação em breve. Chegue 15 minutos antes do horário reservado.</small>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal">Fechar</button>
+          <button type="button" class="btn btn-success" (click)="voltarParaHome()">
+            <i class="bi bi-house me-2"></i>
+            Voltar para Home
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Rodapé recriado do zero, sempre no final da página -->
+<footer class="footer mt-auto py-4 bg-dark text-light border-top" style="position:relative; width:100%;">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 mb-3 mb-md-0">
+        <h6 class="fw-bold text-success">Nossos Esportes</h6>
+        <ul class="list-unstyled mb-0">
+          <li><i class="bi bi-check-circle text-success me-2"></i>Futebol</li>
+          <li><i class="bi bi-check-circle text-success me-2"></i>Vôlei</li>
+          <li><i class="bi bi-check-circle text-success me-2"></i>Tênis</li>
+          <li><i class="bi bi-check-circle text-success me-2"></i>Basquete</li>
+        </ul>
+      </div>
+      <div class="col-md-4 mb-3 mb-md-0">
+        <h6 class="fw-bold text-success">Facilidades</h6>
+        <ul class="list-unstyled mb-0">
+          <li><i class="bi bi-check-circle text-success me-2"></i>Vestiários completos</li>
+          <li><i class="bi bi-check-circle text-success me-2"></i>Estacionamento</li>
+          <li><i class="bi bi-check-circle text-success me-2"></i>Segurança 24h</li>
+          <li><i class="bi bi-check-circle text-success me-2"></i>Equipamentos inclusos</li>
+        </ul>
+      </div>
+      <div class="col-md-4">
+        <h6 class="fw-bold text-success">Horário de Funcionamento</h6>
+        <ul class="list-unstyled mb-0">
+          <li><i class="bi bi-clock text-success me-2"></i>Segunda a Sexta: 6h às 22h</li>
+          <li><i class="bi bi-clock text-success me-2"></i>Sábado: 7h às 20h</li>
+          <li><i class="bi bi-clock text-success me-2"></i>Domingo: 8h às 18h</li>
+        </ul>
+      </div>
+    </div>
+    <hr class="bg-light opacity-50 my-3" />
+    <div class="row">
+      <div class="col text-center small">
+        &copy; 2025 Clube Esportivo. Todos os direitos reservados.
+      </div>
+    </div>
+  </div>
+</footer>

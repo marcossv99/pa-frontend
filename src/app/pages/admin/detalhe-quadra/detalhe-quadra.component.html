@@ -1,0 +1,164 @@
+<!-- Modal de Confirmação de deleção -->
+<div class="modal fade show" tabindex="-1" aria-labelledby="modalConfirmacaoLabel" aria-modal="true" role="dialog" *ngIf="showModalConfirmacao" style="display: block; background: rgba(0,0,0,0.2);">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="modalConfirmacaoLabel">
+          <i class="bi bi-trash me-2"></i>
+          Confirmar deleção da quadra
+        </h5>
+        <button type="button" class="btn-close" (click)="fecharModalConfirmacao()" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body text-center">
+        <p class="mb-3">Tem certeza que deseja deletar esta quadra? Esta ação não pode ser desfeita.</p>
+        <div *ngIf="quadraTemReservas" class="alert alert-warning">
+          <i class="bi bi-exclamation-triangle me-2"></i>
+          <strong>Atenção:</strong> Esta quadra possui reservas registradas por associados.<br>
+          A exclusão pode impactar reservas já realizadas.
+        </div>
+        <div *ngIf="quadraTemReservaFutura" class="alert alert-danger mt-2">
+          <i class="bi bi-calendar-x me-2"></i>
+          <strong>Não é possível excluir:</strong> Existem reservas pendentes para esta quadra.<br>
+          O sistema não permite excluir quadras com reservas futuras. Aguarde a conclusão das reservas para realizar a deleção.
+        </div>
+        <button class="btn btn-outline-secondary me-2" (click)="fecharModalConfirmacao()">Cancelar</button>
+        <button class="btn btn-danger" (click)="confirmarDelecaoQuadra()" [disabled]="quadraTemReservaFutura">Deletar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Sucesso -->
+<div class="modal fade show" tabindex="-1" aria-labelledby="modalSucessoLabel" aria-modal="true" role="dialog" *ngIf="showModalSucesso" style="display: block; background: rgba(0,0,0,0.2);">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title" id="modalSucessoLabel">
+          <i class="bi bi-check-circle me-2"></i>
+          Sucesso
+        </h5>
+        <button type="button" class="btn-close" (click)="fecharModalSucesso()" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body text-center">
+        <p class="mb-3">{{ mensagemModal }}</p>
+        <button class="btn btn-outline-success" (click)="fecharModalSucesso()">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Erro -->
+<div class="modal fade show" tabindex="-1" aria-labelledby="modalErroLabel" aria-modal="true" role="dialog" *ngIf="showModalErro" style="display: block; background: rgba(0,0,0,0.2);">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="modalErroLabel">
+          <i class="bi bi-x-circle me-2"></i>
+          Erro
+        </h5>
+        <button type="button" class="btn-close" (click)="fecharModalErro()" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body text-center">
+        <p class="mb-3">{{ mensagemModal }}</p>
+        <button class="btn btn-outline-danger" (click)="fecharModalErro()">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container py-4" style="background-color: #C8E6C9; min-height: 100vh;">
+  <!-- Header com botão voltar -->
+  <div class="d-flex align-items-center mb-4">
+    <button class="btn btn-outline-success me-3" (click)="voltarParaLista()">
+      <i class="bi bi-arrow-left"></i> Voltar
+    </button>
+    <h2 class="mb-0">Detalhes da Quadra</h2>
+  </div>
+  
+  <div *ngIf="loading">Carregando detalhes...</div>
+  <!-- Modal de Erro -->
+  <div class="modal fade show" tabindex="-1" aria-labelledby="modalErroLabel" aria-modal="true" role="dialog" *ngIf="error" style="display: block; background: rgba(0,0,0,0.2);">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-danger text-white">
+          <h5 class="modal-title" id="modalErroLabel">
+            <i class="bi bi-x-circle me-2"></i>
+            Erro ao carregar detalhes da quadra
+          </h5>
+          <button type="button" class="btn-close" (click)="error = ''" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body text-center">
+          <p class="mb-3">{{ error }}</p>
+          <button class="btn btn-outline-success" (click)="voltarParaLista()">
+            <i class="bi bi-arrow-left me-2"></i>Voltar para Listagem
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="!loading && quadra">
+    <ul class="list-group">
+      <li class="list-group-item"><strong>ID:</strong> {{ quadra.id }}</li>
+      <li class="list-group-item"><strong>Número:</strong> {{ quadra.numero }}</li>
+      <li class="list-group-item"><strong>Modalidade:</strong> {{ quadra.modalidade }}</li>
+      <li class="list-group-item"><strong>Qtd. Pessoas:</strong> {{ quadra.qtdPessoas }}</li>
+      <li class="list-group-item">
+        <strong>Disponível:</strong>
+        <span [class]="quadra.isDisponivel ? 'text-success' : 'text-danger'">
+          {{ quadra.isDisponivel ? 'Sim' : 'Não' }}
+        </span>
+        <span [class]="quadra.isDisponivel ? 'badge bg-success ms-2' : 'badge bg-danger ms-2'">
+          {{ quadra.isDisponivel ? 'Ativa' : 'Inativa' }}
+        </span>
+      </li>
+      <li class="list-group-item">
+        <strong>Imagem:</strong><br>
+        <img [src]="getImagePath(quadra.img)"
+             [alt]="'Imagem da quadra ' + quadra.numero"
+             style="max-width: 300px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"
+             (error)="onImageError($event)" />
+        <!-- Modal de Nenhuma Imagem Cadastrada -->
+        <div class="modal fade show" tabindex="-1" aria-labelledby="modalNenhumaImagemLabel" aria-modal="true" role="dialog" *ngIf="!quadra.img" style="display: block; background: rgba(0,0,0,0.2);">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header bg-warning text-dark">
+                <h5 class="modal-title" id="modalNenhumaImagemLabel">
+                  <i class="bi bi-image me-2"></i>
+                  Nenhuma imagem cadastrada
+                </h5>
+                <button type="button" class="btn-close" aria-label="Fechar" (click)="$event.stopPropagation()"></button>
+              </div>
+              <div class="modal-body text-center">
+                <p class="mb-3">Esta quadra não possui imagem cadastrada.</p>
+                <button class="btn btn-outline-success" (click)="editarQuadra()">
+                  <i class="bi bi-pencil me-2"></i>Cadastrar Imagem
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+    <div class="mt-3 d-flex gap-2 justify-content-center">
+      <button
+        class="btn btn-sm"
+        [class.btn-success]="!quadra.isDisponivel"
+        [class.btn-warning]="quadra.isDisponivel"
+        (click)="alterarDisponibilidade()"
+        title="{{ quadra.isDisponivel ? 'Marcar como Indisponível' : 'Marcar como Disponível' }}"
+      >
+        <i class="bi" [class.bi-toggle-off]="quadra.isDisponivel" [class.bi-toggle-on]="!quadra.isDisponivel"></i>
+        {{ quadra.isDisponivel ? 'Marcar como Indisponível' : 'Marcar como Disponível' }}
+      </button>
+      <button class="btn btn-edit btn-sm" (click)="editarQuadra()" title="Editar quadra">
+        <i class="bi bi-pencil"></i> Editar
+      </button>
+      <button
+        class="btn btn-delete btn-sm"
+        (click)="deletarQuadra()"
+        title="Deletar quadra permanentemente"
+      >
+        <i class="bi bi-trash"></i> Deletar
+      </button>
+    </div>
+  </div>
+</div>

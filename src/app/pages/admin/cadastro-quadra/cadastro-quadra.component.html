@@ -1,0 +1,105 @@
+<div class="container py-4">
+    <div class="d-flex justify-content-end">
+        <nav>
+            <ul class="nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Reservas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Quadras</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Horários</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="header-image text-center position-relative mb-4">
+        <img src="https://images.unsplash.com/photo-1686721135016-49949bd23352?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="img-fluid w-100 header-img-custom" alt="Header" />
+        <h1 class="position-absolute top-50 start-50 translate-middle text-white fw-bold">
+          {{ isEdit ? 'Editar Quadra' : 'Nova Quadra' }}
+        </h1>
+    </div>
+
+    <div class="card bg-light p-4">
+        <form [formGroup]="quadraForm" (ngSubmit)="cadastrarQuadra()">
+            <div class="inputs-row">
+                <div class="mb-3">
+                    <label for="tipoEsporte" class="form-label fw-bold">Tipo de Esporte</label>
+                    <input type="text" id="tipoEsporte" class="form-control" formControlName="modalidade"
+                        placeholder="Informe o esporte" />
+                </div>
+                <div class="mb-3">
+                    <label for="limitePessoas" class="form-label fw-bold">Limite de pessoas</label>
+                    <input type="number" id="limitePessoas" class="form-control" formControlName="qtdPessoas"
+                        placeholder="Informe a quantidade de pessoas" />
+                </div>
+                <div class="mb-3">
+                    <label for="numero" class="form-label fw-bold">Número da Quadra</label>
+                    <input type="number" id="numero" class="form-control" formControlName="numero"
+                        placeholder="Número identificador da quadra" />
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold">Adicione imagens da quadra</label>
+                <input type="file" class="form-control" (change)="onFilesSelected($event)" accept="image/*" multiple [attr.max]="3" />
+                <small class="form-text text-muted">
+                  {{ isEdit ? 'Deixe vazio para manter a imagem atual' : 'Selecione até 3 imagens' }}
+                </small>
+            </div>
+            
+            <!-- Visualização da imagem atual (modo edição) -->
+            <div class="mb-3" *ngIf="isEdit && imagePreviews.length && !selectedFiles.length">
+              <label class="form-label fw-bold">Imagem Atual</label>
+              <div class="d-flex gap-2">
+                <div class="position-relative">
+                  <img [src]="imagePreviews[0]"
+                       alt="Imagem atual da quadra"
+                       class="img-thumbnail"
+                       style="max-width: 200px; max-height: 200px; object-fit: cover; border-radius: 8px;"
+                       (error)="onImageError($event)" />
+                  <small class="text-muted d-block mt-1">Imagem cadastrada</small>
+                </div>
+              </div>
+            </div>
+
+            <!-- Caso não tenha imagem atual (modo edição) -->
+            <!-- Não exibe imagem nenhuma se não houver imagem cadastrada -->
+            <div class="mb-3" *ngIf="isEdit && !imagePreviews.length && !selectedFiles.length">
+              <label class="form-label fw-bold">Imagem Atual</label>
+              <div class="d-flex gap-2">
+                <div class="position-relative">
+                  <span class="text-muted">Nenhuma imagem cadastrada</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Previsualização das novas imagens selecionadas -->
+            <div class="mb-3" *ngIf="selectedFiles.length && newImagePreviews.length">
+              <label class="form-label fw-bold">{{ isEdit ? 'Nova Imagem Selecionada' : 'Prévia das Imagens' }}</label>
+              <div class="d-flex gap-2 flex-wrap">
+                <div *ngFor="let img of newImagePreviews; let i = index" class="preview-img-wrapper position-relative">
+                  <img [src]="img" 
+                       alt="Prévia da imagem {{i+1}}" 
+                       class="img-thumbnail" 
+                       style="max-width: 200px; max-height: 200px; object-fit: cover; border-radius: 8px;" />
+                  <small class="text-success d-block mt-1">{{ isEdit ? 'Substituirá a imagem atual' : 'Nova imagem' }}</small>
+                </div>
+              </div>
+            </div>
+            <div class="d-grid gap-2 mb-3 botoes-row">
+                <button type="submit" class="btn btn-success btn-cadastrar"
+                  [disabled]="!quadraForm.valid || (!isEdit && selectedFiles.length === 0)">
+                  {{ isEdit ? 'Atualizar Quadra' : 'Cadastrar Quadra' }}
+                </button>
+                <button type="button" class="btn btn-outline-success btn-voltar"
+                    (click)="router.navigate(['/admin/lista-quadras'])">Voltar</button>
+            </div>
+        </form>
+    </div>
+
+</div>

@@ -1,0 +1,220 @@
+<div class="container-fluid p-4">
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex align-items-center">
+      <button class="btn btn-outline-success me-3" (click)="voltarHome()">
+        <i class="bi bi-arrow-left"></i> Voltar
+      </button>
+      <h2 class="mb-0 fw-bold text-success">Nossas Quadras</h2>
+    </div>
+
+    <!-- Navbar simplificada -->
+    <nav>
+      <ul class="nav">
+        <li class="nav-item"><a class="nav-link" (click)="voltarHome()" style="cursor: pointer;">Home</a></li>
+        <li class="nav-item"><a class="nav-link" (click)="abrirModalTodasReservas()" style="cursor: pointer;">Reservas</a></li>
+        <li class="nav-item"><a class="nav-link" (click)="navegarParaPerfil()" style="cursor: pointer;">Perfil</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="text-center mb-5 py-4 bg-light rounded-3">
+    <h3 class="fw-bold mb-3">Escolha a Quadra Ideal para Você</h3>
+    <p class="text-muted mb-4">Temos quadras para todos os esportes e modalidades. Encontre a perfeita para sua atividade!</p>
+
+    <!-- Filtros -->
+    <div class="d-flex justify-content-center gap-2 flex-wrap">
+      <button
+        class="btn"
+        [class.btn-success]="filtroModalidade === ''"
+        [class.btn-outline-success]="filtroModalidade !== ''"
+        (click)="filtrarPorModalidade('')"
+      >
+        Todas
+      </button>
+      <button
+        *ngFor="let modalidade of modalidades"
+        class="btn"
+        [class.btn-success]="filtroModalidade === modalidade"
+        [class.btn-outline-success]="filtroModalidade !== modalidade"
+        (click)="filtrarPorModalidade(modalidade)"
+      >
+        {{ modalidade }}
+      </button>
+    </div>
+  </section>
+
+  <!-- Loading -->
+  <div *ngIf="carregando" class="text-center py-5">
+    <div class="spinner-border text-success" role="status">
+      <span class="visually-hidden">Carregando...</span>
+    </div>
+    <p class="mt-3 text-muted">Carregando quadras...</p>
+  </div>
+
+  <!-- Lista de Quadras -->
+  <div *ngIf="!carregando" class="row">
+    <!-- Mensagem informativa quando não há quadras no sistema -->
+    <div *ngIf="quadras.length === 0" class="col-12">
+      <div class="alert alert-info text-center p-5">
+        <i class="bi bi-info-circle display-4 text-info mb-3"></i>
+        <h3 class="mb-3">Sistema em Preparação</h3>
+        <p class="lead mb-4">
+          O sistema está sendo preparado e as quadras ainda estão sendo cadastradas.
+        </p>
+        <p class="mb-4">
+          Em breve você poderá visualizar e reservar nossas quadras esportivas.
+          Entre em contato com a administração para mais informações.
+        </p>
+        <div class="row justify-content-center">
+          <div class="col-md-8">
+            <div class="card border-info">
+              <div class="card-body">
+                <h6 class="card-title text-info">
+                  <i class="bi bi-telephone me-2"></i>Contato
+                </h6>
+                <p class="card-text mb-2">
+                  <strong>Telefone:</strong> (11) 9999-9999
+                </p>
+                <p class="card-text mb-2">
+                  <strong>Email:</strong> contato&#64;clubeesportivo.com
+                </p>
+                <p class="card-text mb-0">
+                  <strong>Horário:</strong> Segunda a Sexta, 8h às 18h
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cards das quadras cadastradas -->
+    <div class="col-lg-4 col-md-6 mb-4" *ngFor="let quadra of quadrasFiltradas">
+      <div class="card h-100 shadow-sm quadra-card">
+        <!-- Imagem da Quadra -->
+        <div class="position-relative">
+          <img
+            [src]="getImageUrl(quadra.img)"
+            class="card-img-top"
+            style="height: 200px; object-fit: cover;"
+            [alt]="'Quadra ' + quadra.numero"
+            onerror="this.src='quadras/futebol-quadra.png'"
+          >
+          <!-- Badge de Status -->
+          <span
+            class="position-absolute top-0 end-0 m-2 badge"
+            [class]="getStatusBadgeClass(quadra)"
+          >
+            {{ getStatusText(quadra) }}
+          </span>
+        </div>
+
+        <!-- Conteúdo do Card -->
+        <div class="card-body d-flex flex-column">
+          <div class="mb-3">
+            <h5 class="card-title fw-bold mb-2">Quadra {{ quadra.numero }}</h5>
+            <span class="badge bg-primary mb-2">{{ quadra.modalidade }}</span>
+            <p class="card-text text-muted small">
+              Quadra especializada para {{ quadra.modalidade.toLowerCase() }} com excelente infraestrutura.
+            </p>
+          </div>
+
+          <!-- Informações da Quadra -->
+          <div class="row mb-3 text-center">
+            <div class="col-6">
+              <div class="bg-light p-2 rounded">
+                <i class="bi bi-people-fill text-success d-block mb-1"></i>
+                <small class="text-muted">Capacidade</small>
+                <div class="fw-bold">{{ quadra.qtdPessoas }}</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="bg-light p-2 rounded">
+                <i class="bi bi-trophy-fill text-warning d-block mb-1"></i>
+                <small class="text-muted">Modalidade</small>
+                <div class="fw-bold small">{{ quadra.modalidade }}</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Equipamentos -->
+          <div class="mb-3">
+            <small class="text-muted d-block mb-2">Equipamentos disponíveis:</small>
+            <div class="d-flex flex-wrap gap-1">
+              <span class="badge bg-light text-dark">Iluminação</span>
+              <span class="badge bg-light text-dark">Vestiários</span>
+              <span class="badge bg-light text-dark">Chuveiros</span>
+              <span class="badge bg-light text-dark">Segurança</span>
+            </div>
+          </div>
+
+          <!-- Botões de Ação -->
+          <div class="mt-auto">
+            <button
+              class="btn btn-success w-100"
+              [disabled]="!quadra.isDisponivel"
+              (click)="verHorarios(quadra.id)"
+            >
+              <i class="bi bi-calendar-check me-2"></i>
+              {{ quadra.isDisponivel ? 'Ver Horários' : 'Indisponível' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mensagem quando não há quadras após filtro -->
+    <div *ngIf="quadrasFiltradas.length === 0 && quadras.length > 0" class="col-12">
+      <div class="text-center py-5">
+        <i class="bi bi-search display-1 text-muted"></i>
+        <h4 class="mt-3 text-muted">Nenhuma quadra encontrada para {{ filtroModalidade }}</h4>
+        <p class="text-muted">Tente filtrar por uma modalidade diferente ou remova os filtros.</p>
+        <button class="btn btn-outline-success" (click)="filtrarPorModalidade('')">
+          Ver Todas as Quadras
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Rodapé recriado do zero, sempre no final da página -->
+<footer class="footer mt-auto py-4 bg-dark text-light border-top" style="position:relative; width:100%;">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 mb-3 mb-md-0">
+        <h6 class="fw-bold text-success">Nossos Esportes</h6>
+        <ul class="list-unstyled mb-0">
+          <li><i class="bi bi-check-circle text-success me-2"></i>Futebol</li>
+          <li><i class="bi bi-check-circle text-success me-2"></i>Vôlei</li>
+          <li><i class="bi bi-check-circle text-success me-2"></i>Tênis</li>
+          <li><i class="bi bi-check-circle text-success me-2"></i>Basquete</li>
+        </ul>
+      </div>
+      <div class="col-md-4 mb-3 mb-md-0">
+        <h6 class="fw-bold text-success">Facilidades</h6>
+        <ul class="list-unstyled mb-0">
+          <li><i class="bi bi-check-circle text-success me-2"></i>Vestiários completos</li>
+          <li><i class="bi bi-check-circle text-success me-2"></i>Estacionamento</li>
+          <li><i class="bi bi-check-circle text-success me-2"></i>Segurança 24h</li>
+          <li><i class="bi bi-check-circle text-success me-2"></i>Equipamentos inclusos</li>
+        </ul>
+      </div>
+      <div class="col-md-4">
+        <h6 class="fw-bold text-success">Horário de Funcionamento</h6>
+        <ul class="list-unstyled mb-0">
+          <li><i class="bi bi-clock text-success me-2"></i>Segunda a Sexta: 6h às 22h</li>
+          <li><i class="bi bi-clock text-success me-2"></i>Sábado: 7h às 20h</li>
+          <li><i class="bi bi-clock text-success me-2"></i>Domingo: 8h às 18h</li>
+        </ul>
+      </div>
+    </div>
+    <hr class="bg-light opacity-50 my-3" />
+    <div class="row">
+      <div class="col text-center small">
+        &copy; 2025 Clube Esportivo. Todos os direitos reservados.
+      </div>
+    </div>
+  </div>
+</footer>

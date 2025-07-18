@@ -1,66 +1,131 @@
 <div class="container d-flex justify-content-center align-items-center min-vh-100 bg-light">
-  <div class="w-100" style="max-width: 500px">
-    <!-- Título centralizado -->
-    <h2 class="text-center fw-bold mb-5">Finalize o cadastro</h2>
-
-    <!-- Campo de Senha -->
-    <div class="mb-4">
-      <label for="senha" class="form-label fw-bold fs-5">Senha</label>
-      <div class="input-group">
-        <input
-          type="password"
-          id="senha"
-          class="form-control"
-          placeholder="Informe uma senha"
-          [(ngModel)]="senha"
-          name="senha"
-          required
-        />
-        <span
-          class="input-group-text"
-          role="button"
-          (click)="senha = ''"
-          *ngIf="senha"
-        >
-          <i class="bi bi-x-circle"></i>
-        </span>
-      </div>
+  <div class="w-100" style="max-width: 700px">
+    <!-- Título -->
+    <div class="text-center mb-5">
+      <h1 class="fw-bold text-success">
+        <i class="bi bi-shield-lock me-2"></i>
+        Finalize seu Cadastro
+      </h1>
+      <p class="text-muted">Confirme sua senha para completar o cadastro</p>
     </div>
 
-    <!-- Campo de Confirmar Senha -->
-    <div class="mb-4">
-      <label for="confirmarSenha" class="form-label fw-bold fs-5">Confirmar senha</label>
-      <div class="input-group">
-        <input
-          type="password"
-          id="confirmarSenha"
-          class="form-control"
-          placeholder="Confirme sua senha"
-          [(ngModel)]="confirmarSenha"
-          name="confirmarSenha"
-          required
-        />
-        <span
-          class="input-group-text"
-          role="button"
-          (click)="confirmarSenha = ''"
-          *ngIf="confirmarSenha"
-        >
-          <i class="bi bi-x-circle"></i>
-        </span>
+    <!-- Formulário em Card -->
+    <div class="card shadow-lg border-0">
+      <div class="card-header bg-success text-white">
+        <h5 class="card-title mb-0">
+          <i class="bi bi-key me-2"></i>
+          Confirmação de Senha
+        </h5>
+      </div>
+      <div class="card-body p-4">
+        <form #form="ngForm">
+          <div class="row g-4">
+            <!-- Senha -->
+            <div class="col-12">
+              <label class="form-label fw-bold">Senha *</label>
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="bi bi-lock"></i>
+                </span>
+                <input 
+                  [type]="mostrarSenha ? 'text' : 'password'" 
+                  class="form-control" 
+                  placeholder="Digite sua senha"
+                  [(ngModel)]="senha" 
+                  name="senha" 
+                  required
+                  [class.is-invalid]="senha && senha.length < 6"
+                />
+                <button 
+                  type="button"
+                  class="btn btn-outline-secondary" 
+                  (click)="toggleMostrarSenha()"
+                  title="Mostrar/Ocultar senha"
+                >
+                  <i class="bi" [class.bi-eye]="!mostrarSenha" [class.bi-eye-slash]="mostrarSenha"></i>
+                </button>
+              </div>
+              <div *ngIf="senha && senha.length < 6" class="invalid-feedback">
+                Senha deve ter pelo menos 6 caracteres
+              </div>
+            </div>
+
+            <!-- Confirmar Senha -->
+            <div class="col-12">
+              <label class="form-label fw-bold">Confirmar Senha *</label>
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="bi bi-lock-fill"></i>
+                </span>
+                <input 
+                  [type]="mostrarConfirmarSenha ? 'text' : 'password'" 
+                  class="form-control" 
+                  placeholder="Digite sua senha novamente"
+                  [(ngModel)]="confirmarSenha" 
+                  name="confirmarSenha" 
+                  required
+                  [class.is-invalid]="confirmarSenha && senha !== confirmarSenha"
+                />
+                <button 
+                  type="button"
+                  class="btn btn-outline-secondary" 
+                  (click)="toggleMostrarConfirmarSenha()"
+                  title="Mostrar/Ocultar senha"
+                >
+                  <i class="bi" [class.bi-eye]="!mostrarConfirmarSenha" [class.bi-eye-slash]="mostrarConfirmarSenha"></i>
+                </button>
+              </div>
+              <div *ngIf="confirmarSenha && senha !== confirmarSenha" class="invalid-feedback">
+                Senhas não conferem
+              </div>
+            </div>
+          </div>
+
+          <!-- Alerta de segurança -->
+          <div class="alert alert-info mt-4">
+            <i class="bi bi-info-circle me-2"></i>
+            <strong>Dica de segurança:</strong> Use uma senha com pelo menos 6 caracteres, combinando letras e números.
+          </div>
+
+          <!-- Botões -->
+          <div class="d-flex justify-content-between mt-4">
+            <button 
+              type="button" 
+              class="btn btn-outline-success px-4" 
+              (click)="voltar()"
+            >
+              <i class="bi bi-arrow-left me-2"></i>
+              Voltar
+            </button>
+            
+            <button 
+              type="button" 
+              class="btn btn-success px-4" 
+              (click)="confirmarCadastro()"
+              [disabled]="!senha || !confirmarSenha || senha !== confirmarSenha || senha.length < 6"
+            >
+              <i class="bi bi-check-circle me-2"></i>
+              Finalizar Cadastro
+            </button>
+          </div>
+        </form>
       </div>
     </div>
+  </div>
+</div>
 
-    <!-- Botões -->
-    <div class="d-flex justify-content-between mt-4">
-      <button class="btn btn-outline-success px-4" (click)="voltar()">Voltar</button>
-      <button
-        class="btn btn-success px-4"
-        (click)="confirmarCadastro()"
-        [disabled]="!senha || !confirmarSenha || senha !== confirmarSenha"
-      >
-        Finalizar Cadastro
-      </button>
+<!-- Modal customizado -->
+<div *ngIf="showModal" class="modal-backdrop-custom">
+  <div class="modal-custom">
+    <div class="modal-content-custom">
+      <div class="modal-body-custom text-center">
+        <span [ngClass]="{'text-success': modalSuccess, 'text-center': !modalSuccess}" style="font-size: 1.2rem; font-weight: bold;">
+          {{ modalMessage }}
+        </span>
+      </div>
+      <div class="modal-footer-custom text-center mt-3">
+        <button class="btn btn-success px-4" (click)="fecharModal()">OK</button>
+      </div>
     </div>
   </div>
 </div>

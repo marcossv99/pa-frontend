@@ -1,0 +1,265 @@
+<div class="container d-flex justify-content-center align-items-center min-vh-100 bg-light">
+  <div class="w-100" style="max-width: 900px">
+    <!-- Título -->
+    <div class="text-center mb-5">
+      <h1 class="fw-bold text-success">
+        <i class="bi bi-shield-check me-2"></i>
+        Cadastro de Administrador
+      </h1>
+      <p class="text-muted">Preencha os dados para criar um novo administrador do sistema</p>
+    </div>
+
+    <!-- Alertas -->
+    <div *ngIf="erro" class="alert alert-danger alert-dismissible fade show" role="alert">
+      <i class="bi bi-exclamation-triangle me-2"></i>
+      {{ erro }}
+      <button type="button" class="btn-close" (click)="erro = ''"></button>
+    </div>
+
+    <div *ngIf="sucesso" class="alert alert-success alert-dismissible fade show" role="alert">
+      <i class="bi bi-check-circle me-2"></i>
+      {{ sucesso }}
+      <button type="button" class="btn-close" (click)="sucesso = ''"></button>
+    </div>
+
+    <!-- Formulário em 2 colunas -->
+    <div class="card shadow-lg border-0">
+      <div class="card-header bg-success text-white">
+        <h5 class="card-title mb-0">
+          <i class="bi bi-person-plus me-2"></i>
+          Dados do Administrador
+        </h5>
+      </div>
+      <div class="card-body p-4">
+        <form #form="ngForm" (ngSubmit)="cadastrarAdmin()">
+          <div class="row g-4">
+            <!-- Nome completo -->
+            <div class="col-md-6">
+              <label class="form-label fw-bold">Nome completo *</label>
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="bi bi-person"></i>
+                </span>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  placeholder="Informe o nome completo"
+                  [(ngModel)]="dadosCadastro.nome" 
+                  name="nome" 
+                  required
+                  [class.is-invalid]="dadosCadastro.nome && dadosCadastro.nome.trim().length < 2"
+                />
+                <button 
+                  type="button"
+                  class="btn btn-outline-secondary" 
+                  *ngIf="dadosCadastro.nome"
+                  (click)="limparCampo('nome')"
+                >
+                  <i class="bi bi-x"></i>
+                </button>
+              </div>
+              <div *ngIf="dadosCadastro.nome && dadosCadastro.nome.trim().length < 2" class="invalid-feedback">
+                Nome deve ter pelo menos 2 caracteres
+              </div>
+            </div>
+
+            <!-- CPF -->
+            <div class="col-md-6">
+              <label class="form-label fw-bold">CPF *</label>
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="bi bi-card-text"></i>
+                </span>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  placeholder="000.000.000-00"
+                  [(ngModel)]="dadosCadastro.cpf" 
+                  name="cpf" 
+                  required
+                  (ngModelChange)="dadosCadastro.cpf = formatarCpf(dadosCadastro.cpf)"
+                  [class.is-invalid]="dadosCadastro.cpf && !cpfValido(dadosCadastro.cpf)"
+                />
+                <button 
+                  type="button"
+                  class="btn btn-outline-secondary" 
+                  *ngIf="dadosCadastro.cpf" 
+                  (click)="limparCampo('cpf')"
+                >
+                  <i class="bi bi-x"></i>
+                </button>
+              </div>
+              <div *ngIf="dadosCadastro.cpf && !cpfValido(dadosCadastro.cpf)" class="invalid-feedback">
+                CPF inválido
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div class="col-md-6">
+              <label class="form-label fw-bold">Email *</label>
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="bi bi-envelope"></i>
+                </span>
+                <input 
+                  type="email" 
+                  class="form-control" 
+                  placeholder="admin@exemplo.com"
+                  [(ngModel)]="dadosCadastro.email" 
+                  name="email" 
+                  required
+                  [class.is-invalid]="dadosCadastro.email && !emailValido(dadosCadastro.email)"
+                />
+                <button 
+                  type="button"
+                  class="btn btn-outline-secondary" 
+                  *ngIf="dadosCadastro.email" 
+                  (click)="limparCampo('email')"
+                >
+                  <i class="bi bi-x"></i>
+                </button>
+              </div>
+              <div *ngIf="dadosCadastro.email && !emailValido(dadosCadastro.email)" class="invalid-feedback">
+                Email inválido
+              </div>
+            </div>
+
+            <!-- Telefone -->
+            <div class="col-md-6">
+              <label class="form-label fw-bold">Telefone *</label>
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="bi bi-telephone"></i>
+                </span>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  placeholder="(00) 00000-0000"
+                  [(ngModel)]="dadosCadastro.telefone" 
+                  name="telefone" 
+                  required
+                  (ngModelChange)="dadosCadastro.telefone = formatarTelefone(dadosCadastro.telefone)"
+                  [class.is-invalid]="dadosCadastro.telefone && !telefoneValido(dadosCadastro.telefone)"
+                />
+                <button 
+                  type="button"
+                  class="btn btn-outline-secondary" 
+                  *ngIf="dadosCadastro.telefone" 
+                  (click)="limparCampo('telefone')"
+                >
+                  <i class="bi bi-x"></i>
+                </button>
+              </div>
+              <div *ngIf="dadosCadastro.telefone && !telefoneValido(dadosCadastro.telefone)" class="invalid-feedback">
+                Telefone inválido
+              </div>
+            </div>
+
+            <!-- Senha -->
+            <div class="col-md-6">
+              <label class="form-label fw-bold">Senha *</label>
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="bi bi-lock"></i>
+                </span>
+                <input 
+                  [type]="mostrarSenha ? 'text' : 'password'" 
+                  class="form-control" 
+                  placeholder="Mínimo 6 caracteres"
+                  [(ngModel)]="dadosCadastro.senha" 
+                  name="senha" 
+                  required
+                  [class.is-invalid]="dadosCadastro.senha && !senhaValida(dadosCadastro.senha)"
+                />
+                <button 
+                  type="button"
+                  class="btn btn-outline-secondary" 
+                  (click)="toggleMostrarSenha()"
+                >
+                  <i class="bi" [class.bi-eye]="!mostrarSenha" [class.bi-eye-slash]="mostrarSenha"></i>
+                </button>
+                <button 
+                  type="button"
+                  class="btn btn-outline-secondary" 
+                  *ngIf="dadosCadastro.senha" 
+                  (click)="limparCampo('senha')"
+                >
+                  <i class="bi bi-x"></i>
+                </button>
+              </div>
+              <div *ngIf="dadosCadastro.senha && !senhaValida(dadosCadastro.senha)" class="invalid-feedback">
+                Senha deve ter pelo menos 6 caracteres
+              </div>
+            </div>
+
+            <!-- Confirmação de Senha -->
+            <div class="col-md-6">
+              <label class="form-label fw-bold">Confirmar Senha *</label>
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="bi bi-lock-fill"></i>
+                </span>
+                <input 
+                  [type]="mostrarConfirmacaoSenha ? 'text' : 'password'" 
+                  class="form-control" 
+                  placeholder="Confirme a senha"
+                  [(ngModel)]="confirmacaoSenha" 
+                  name="confirmacaoSenha" 
+                  required
+                  [class.is-invalid]="confirmacaoSenha && !senhasConferem()"
+                />
+                <button 
+                  type="button"
+                  class="btn btn-outline-secondary" 
+                  (click)="toggleMostrarConfirmacaoSenha()"
+                >
+                  <i class="bi" [class.bi-eye]="!mostrarConfirmacaoSenha" [class.bi-eye-slash]="mostrarConfirmacaoSenha"></i>
+                </button>
+                <button 
+                  type="button"
+                  class="btn btn-outline-secondary" 
+                  *ngIf="confirmacaoSenha" 
+                  (click)="limparCampo('confirmacaoSenha')"
+                >
+                  <i class="bi bi-x"></i>
+                </button>
+              </div>
+              <div *ngIf="confirmacaoSenha && !senhasConferem()" class="invalid-feedback">
+                Senhas não conferem
+              </div>
+            </div>
+          </div>
+
+          <!-- Info sobre Admin -->
+          <div class="alert alert-info mt-4">
+            <i class="bi bi-info-circle me-2"></i>
+            <strong>Atenção:</strong> Este usuário será cadastrado como <strong>Administrador</strong> e terá acesso total ao sistema.
+          </div>
+
+          <!-- Botões -->
+          <div class="d-flex justify-content-between mt-4">
+            <button 
+              type="button" 
+              class="btn btn-outline-success px-4" 
+              (click)="cancelar()"
+              [disabled]="carregando"
+            >
+              <i class="bi bi-arrow-left me-2"></i>
+              Cancelar
+            </button>
+            
+            <button 
+              type="submit" 
+              class="btn btn-success px-4" 
+              [disabled]="!formularioValido() || carregando"
+            >
+              <span *ngIf="carregando" class="spinner-border spinner-border-sm me-2"></span>
+              <i *ngIf="!carregando" class="bi bi-shield-check me-2"></i>
+              {{ carregando ? 'Cadastrando...' : 'Cadastrar Administrador' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,53 +1,58 @@
 <div class="container-fluid">
-  <div class="row login-content">
-    <!-- Seção Esquerda -->
-    <div class="col-md-6 left-section">
-      <h1 class="mb-4">Bem-vindo</h1>
-      <img src="assets/images/campo-futebol.svg" alt="Campo de futebol" class="field-image img-fluid">
+    <div class="row login-content">
+        <!-- Seção Esquerda -->
+        <div class="col-md-6 left-section">
+            <div class="login-bg-image text-center position-relative" style="min-height: 220px;">
+              <img src="/login/login.png" alt="Login" class="img-login-bg position-absolute top-50 start-50 translate-middle" style="width: 220px; opacity: 0.18; z-index: 1; pointer-events: none;">
+              <h1 class="mb-4 bem-vindo-titulo position-relative" style="z-index: 2;">Bem-vindo</h1>
+            </div>
+        </div>
+
+        <!-- Seção Direita -->
+        <div class="col-md-6 right-section">
+            <form class="login-form">
+                <!-- CPF ou Email -->
+                <div class="mb-4">
+                    <label for="cpfEmail" class="form-label">CPF ou Email</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="cpfEmail" name="cpfEmail" [(ngModel)]="cpfOuEmail"
+                            placeholder="Informe seu email ou cpf" required
+                            (ngModelChange)="isCpf(cpfOuEmail) ? cpfOuEmail = formatarCpf(cpfOuEmail) : null">
+                        <button *ngIf="cpfOuEmail" class="btn btn-outline-secondary clear-button" type="button"
+                            (click)="cpfOuEmail = ''">
+                            <i class="bi bi-x"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Senha -->
+                <div class="mb-4">
+                    <label for="senha" class="form-label">Senha</label>
+                    <div class="input-group">
+                        <input [type]="mostrarSenha ? 'text' : 'password'" class="form-control" id="senha" name="senha"
+                            [(ngModel)]="senha" placeholder="Informe sua senha" required>
+                        <button class="btn btn-outline-secondary" type="button" (click)="toggleMostrarSenha()">
+                            <i class="bi" [ngClass]="mostrarSenha ? 'bi-eye-slash' : 'bi-eye'"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Checkbox Lembrar de mim -->
+                <div class="mb-4 form-check remember-me">
+                    <input type="checkbox" class="form-check-input" id="lembrarDeMim" [(ngModel)]="lembrarDeMim"
+                        name="lembrarDeMim">
+                    <label class="form-check-label" for="lembrarDeMim">Lembrar de mim</label>
+                </div>
+
+                <!-- Botões -->
+                <button type="button" class="btn btn-success w-100 mb-3" (click)="fazerLogin()">Login</button>
+
+                <div class="text-center mb-4">
+                    <a href="#" class="forgot-password">Esqueci minha senha</a>
+                </div>
+
+                <!-- Cadastro removido para login de associado -->
+            </form>
+        </div>
     </div>
-
-    <!-- Seção Direita -->
-    <div class="col-md-6 right-section">
-      <form class="login-form">
-        <!-- CPF ou Email -->
-        <div class="mb-4">
-          <label for="cpfEmail" class="form-label">CPF ou Email</label>
-          <div class="input-group">
-            <input type="text" class="form-control" id="cpfEmail" name="cpfEmail" [(ngModel)]="cpfOuEmail"
-              placeholder="Informe seu email ou cpf" required>
-            <button *ngIf="cpfOuEmail" class="btn btn-outline-secondary clear-button" type="button" (click)="cpfOuEmail = ''">
-              <i class="bi bi-x"></i>
-            </button>
-          </div>
-        </div>
-
-        <!-- Senha -->
-        <div class="mb-4">
-          <label for="senha" class="form-label">Senha</label>
-          <div class="input-group">
-            <input [type]="mostrarSenha ? 'text' : 'password'" class="form-control" id="senha" name="senha" [(ngModel)]="senha"
-              placeholder="Informe sua senha" required>
-            <button class="btn btn-outline-secondary" type="button" (click)="toggleMostrarSenha()">
-              <i class="bi" [ngClass]="mostrarSenha ? 'bi-eye-slash' : 'bi-eye'"></i>
-            </button>
-          </div>
-        </div>
-
-        <!-- Checkbox Lembrar de mim -->
-        <div class="mb-4 form-check remember-me">
-          <input type="checkbox" class="form-check-input" id="lembrarDeMim" [(ngModel)]="lembrarDeMim" name="lembrarDeMim">
-          <label class="form-check-label" for="lembrarDeMim">Lembrar de mim</label>
-        </div>
-
-        <!-- Botões -->
-        <button type="button" class="btn btn-success w-100 mb-3" (click)="fazerLogin()">Login</button>
-        
-        <div class="text-center mb-4">
-          <a href="#" class="forgot-password">Esqueci minha senha</a>
-        </div>
-
-        <button type="button" class="btn btn-outline-success w-100">Cadastrar</button>
-      </form>
-    </div>
-  </div>
 </div>

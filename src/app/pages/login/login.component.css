@@ -1,3 +1,31 @@
+/* Imagem de fundo grande para tela de login */
+.login-bg-image {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.img-login-bg {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 500px;
+  opacity: 0.18;
+  z-index: 1;
+}
+.bem-vindo-titulo {
+  position: relative;
+  z-index: 2;
+  color: #222;
+  font-size: 3.5rem;
+  font-weight: 700;
+  text-align: left;
+  width: 100%;
+}
 .login-content {
   min-height: 600px;
   background-color: white;
@@ -5,7 +33,11 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
-
+.input-group input:focus{
+  border: 1px solid #4CAF50;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+  
+}
 /* Estilos para a seção esquerda */
 .left-section {
   padding: 3rem;
@@ -81,6 +113,69 @@ button{
   color: #222;
   font-weight: 700;
 }
+
+/* ========== BOTÕES PADRONIZADOS ========== */
+
+/* Botão Success padrão */
+.btn-success {
+  background: linear-gradient(135deg, #28CB8B 0%, #24B77A 100%) !important;
+  border: none !important;
+  color: white !important;
+  border-radius: 2px !important;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-success:hover,
+.btn-success:focus,
+.btn-success:active {
+  background: linear-gradient(135deg, #24B77A 0%, #28CB8B 100%) !important;
+  color: white !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(40, 203, 139, 0.3);
+}
+
+/* Botão Outline Success */
+.btn-outline-success {
+  background: white !important;
+  border: 2px solid #28CB8B !important;
+  color: #28CB8B !important;
+  border-radius: 2px !important;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-success:hover,
+.btn-outline-success:focus,
+.btn-outline-success:active {
+  background: #28CB8B !important;
+  border-color: #28CB8B !important;
+  color: white !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(40, 203, 139, 0.3);
+}
+
+/* Botão Outline Secondary */
+.btn-outline-secondary {
+  background: white !important;
+  border: 2px solid #6c757d !important;
+  color: #6c757d !important;
+  border-radius: 2px !important;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-secondary:hover,
+.btn-outline-secondary:focus,
+.btn-outline-secondary:active {
+  background: #6c757d !important;
+  border-color: #6c757d !important;
+  color: white !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(108, 117, 125, 0.3);
+}
+
+/* ========== FIM DOS BOTÕES PADRONIZADOS ========== */
 
 /* Responsividade */
 @media screen and (max-width: 768px) {

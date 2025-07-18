@@ -1,1 +1,370 @@
 /* You can add global styles to this file, and also import other style files */
+/* Variáveis globais para botões */
+
+@import './app/styles/modal-styles.css';
+
+:root {
+  --color-primary: #28CB8B;
+  --color-shade: #24B77A;
+}
+
+/* Estilos globais para botões */
+
+/* Botão primário padrão - fundo verde (#28CB8B) */
+button.btn-success,
+button.btn-primary,
+button.btn-primary-custom,
+.btn-success,
+.btn-primary,
+.btn-primary-custom {
+  background-color: var(--color-primary) !important;
+  border: 2px solid var(--color-primary) !important;
+  color: white !important;
+  border-radius: 2px !important;
+  font-weight: 500 !important;
+  transition: all 0.3s ease !important;
+}
+
+.btn-success:hover,
+.btn-success:focus,
+.btn-success:active,
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary-custom:hover,
+.btn-primary-custom:focus,
+.btn-primary-custom:active {
+  background-color: white !important;
+  border: 2px solid var(--color-primary) !important;
+  color: var(--color-primary) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 2px 8px rgba(40, 203, 139, 0.3) !important;
+}
+
+/* Botões secundários - Voltar, Cancelar */
+button.btn-outline-success,
+button.btn-secondary,
+button.btn-outline-secondary,
+button.btn-secondary-custom,
+.btn-outline-success,
+.btn-secondary,
+.btn-outline-secondary,
+.btn-secondary-custom {
+  background-color: var(--color-shade) !important;
+  border: 2px solid var(--color-shade) !important;
+  color: white !important;
+  border-radius: 2px !important;
+  font-weight: 500 !important;
+  transition: all 0.3s ease !important;
+}
+
+.btn-outline-success:hover,
+.btn-outline-success:focus,
+.btn-outline-success:active,
+.btn-secondary:hover,
+.btn-secondary:focus,
+.btn-secondary:active,
+.btn-outline-secondary:hover,
+.btn-outline-secondary:focus,
+.btn-outline-secondary:active,
+.btn-secondary-custom:hover,
+.btn-secondary-custom:focus,
+.btn-secondary-custom:active {
+  background-color: white !important;
+  border: 2px solid var(--color-shade) !important;
+  color: var(--color-shade) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 2px 8px rgba(40, 203, 139, 0.3) !important;
+}
+
+/* Botões de editar */
+.btn-edit,
+.btn-warning {
+  background-color: #103E13 !important;
+  border: 3px solid #103E13 !important;
+  color: white !important;
+  border-radius: 2px !important;
+  transition: all 0.3s ease !important;
+}
+
+.btn-edit:hover,
+.btn-warning:hover {
+  background-color: white !important;
+  border: 3px solid #103E13 !important;
+  color: #103E13 !important;
+}
+
+/* Botões de deletar/apagar */
+.btn-danger,
+.btn-delete {
+  background-color: #E53835 !important;
+  border: 3px solid #E53835 !important;
+  color: white !important;
+  border-radius: 2px !important;
+  transition: all 0.3s ease !important;
+}
+
+.btn-danger:hover,
+.btn-delete:hover {
+  background-color: white !important;
+  border: 3px solid #E53835 !important;
+  color: #E53835 !important;
+}
+
+/* Aplicar arredondamento de 2px para todos os botões */
+.btn {
+  border-radius: 2px !important;
+  transition: all 0.3s ease !important;
+}
+
+/* Botões especiais de limpar campos */
+.clear-button {
+  background-color: transparent !important;
+  border: none !important;
+  color: #6c757d !important;
+}
+
+.clear-button:hover {
+  background-color: #f8f9fa !important;
+  color: #495057 !important;
+}
+
+/* ========== ESTILOS GLOBAIS PARA INPUTS - BORDER RADIUS 2PX ========== */
+
+/* Todos os tipos de inputs com border-radius 2px */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="tel"],
+input[type="url"],
+input[type="search"],
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="month"],
+input[type="week"],
+input[type="file"],
+textarea,
+select,
+.form-control,
+.form-select {
+  border-radius: 2px !important;
+  border: 1px solid #ced4da !important;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out !important;
+}
+
+/* Estados de foco dos inputs */
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+input[type="tel"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+input[type="date"]:focus,
+input[type="time"]:focus,
+input[type="datetime-local"]:focus,
+input[type="month"]:focus,
+input[type="week"]:focus,
+input[type="file"]:focus,
+textarea:focus,
+select:focus,
+.form-control:focus,
+.form-select:focus {
+  border-radius: 2px !important;
+  border-color: #28CB8B !important;
+  box-shadow: 0 0 0 0.2rem rgba(40, 203, 139, 0.25) !important;
+}
+
+/* Input groups */
+.input-group .form-control,
+.input-group .form-select,
+.input-group .btn {
+  border-radius: 2px !important;
+}
+
+.input-group .form-control:first-child,
+.input-group .form-select:first-child {
+  border-top-left-radius: 2px !important;
+  border-bottom-left-radius: 2px !important;
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+.input-group .form-control:last-child,
+.input-group .form-select:last-child,
+.input-group .btn:last-child {
+  border-top-right-radius: 2px !important;
+  border-bottom-right-radius: 2px !important;
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+/* Floating labels */
+.form-floating .form-control,
+.form-floating .form-select {
+  border-radius: 2px !important;
+}
+
+.form-floating .form-control:focus,
+.form-floating .form-select:focus {
+  border-radius: 2px !important;
+}
+
+/* Checkboxes e radio buttons */
+.form-check-input {
+  border-radius: 2px !important;
+}
+
+.form-check-input[type="radio"] {
+  border-radius: 50% !important; /* Manter radio buttons redondos */
+}
+
+/* Switches */
+.form-switch .form-check-input {
+  border-radius: 2px !important;
+}
+
+/* Custom file inputs */
+.form-control[type="file"] {
+  border-radius: 2px !important;
+}
+
+/* Range inputs */
+input[type="range"] {
+  border-radius: 2px !important;
+}
+
+/* ========== CORREÇÕES GLOBAIS DE CONTRASTE ========== */
+
+/* Garantir que textos tenham contraste adequado */
+.text-white:not(.bg-primary):not(.bg-secondary):not(.bg-success):not(.bg-danger):not(.bg-warning):not(.bg-info):not(.bg-dark) {
+  color: #263238 !important;
+}
+
+/* Cards com fundo colorido */
+.card.bg-success {
+  background: #81C784 !important;
+}
+
+.card.bg-success .card-header {
+  background: rgba(0, 0, 0, 0.1) !important;
+  color: black !important;
+}
+
+.card.bg-success .card-body {
+  background: white !important;
+  color: #263238 !important;
+}
+
+/* Badges */
+.badge.bg-success {
+  background-color: #28CB8B !important;
+  color: white !important;
+}
+
+/* ========== FIM DOS ESTILOS GLOBAIS ========== */
+
+/* ========== BOTÕES DOS MODAIS - PADRÃO GLOBAL PARA TODO O SISTEMA ========== */
+
+/* Todos os botões em modais Bootstrap */
+.modal .btn {
+  border-radius: 2px !important;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+/* Botão Secundário em todos os modais */
+.modal .btn-secondary,
+.modal .btn[class*="secondary"] {
+  background-color: var(--color-shade) !important;
+  border: 2px solid var(--color-shade) !important;
+  color: white !important;
+}
+
+.modal .btn-secondary:hover,
+.modal .btn-secondary:focus,
+.modal .btn-secondary:active,
+.modal .btn[class*="secondary"]:hover,
+.modal .btn[class*="secondary"]:focus,
+.modal .btn[class*="secondary"]:active {
+  background-color: white !important;
+  border: 2px solid var(--color-shade) !important;
+  color: var(--color-shade) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 2px 8px rgba(40, 203, 139, 0.3) !important;
+}
+
+/* Botão Success em todos os modais */
+.modal .btn-success,
+.modal .btn[class*="success"] {
+  background-color: var(--color-primary) !important;
+  border: 2px solid var(--color-primary) !important;
+  color: white !important;
+}
+
+.modal .btn-success:hover,
+.modal .btn-success:focus,
+.modal .btn-success:active,
+.modal .btn[class*="success"]:hover,
+.modal .btn[class*="success"]:focus,
+.modal .btn[class*="success"]:active {
+  background-color: white !important;
+  border: 2px solid var(--color-primary) !important;
+  color: var(--color-primary) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 2px 8px rgba(40, 203, 139, 0.3) !important;
+}
+
+/* Botão Primary em todos os modais */
+.modal .btn-primary,
+.modal .btn[class*="primary"] {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-shade) 100%) !important;
+  border: none !important;
+  color: white !important;
+}
+
+.modal .btn-primary:hover,
+.modal .btn-primary:focus,
+.modal .btn-primary:active,
+.modal .btn[class*="primary"]:hover,
+.modal .btn[class*="primary"]:focus,
+.modal .btn[class*="primary"]:active {
+  background: linear-gradient(135deg, var(--color-shade) 0%, var(--color-primary) 100%) !important;
+  color: white !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(40, 203, 139, 0.3);
+}
+
+/* Botão Danger em todos os modais */
+.modal .btn-danger,
+.modal .btn[class*="danger"] {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%) !important;
+  border: none !important;
+  color: white !important;
+}
+
+.modal .btn-danger:hover,
+.modal .btn-danger:focus,
+.modal .btn-danger:active,
+.modal .btn[class*="danger"]:hover,
+.modal .btn[class*="danger"]:focus,
+.modal .btn[class*="danger"]:active {
+  background: linear-gradient(135deg, #c82333 0%, #a02030 100%) !important;
+  color: white !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+}
+
+/* Estados disabled para todos os botões de modal */
+.modal .btn:disabled {
+  background: #e9ecef !important;
+  color: #6c757d !important;
+  border-color: #e9ecef !important;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ========== FIM DOS BOTÕES DOS MODAIS ========== */

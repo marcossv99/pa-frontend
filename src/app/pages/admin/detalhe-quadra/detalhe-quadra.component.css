@@ -1,0 +1,130 @@
+.container { 
+  max-width: 600px; 
+  margin: auto; 
+}
+
+img { 
+  border: 1px solid #ccc; 
+  border-radius: 8px; 
+  margin-top: 10px; 
+}
+
+/* ========== BOTÕES PADRONIZADOS ========== */
+
+/* Botão Success */
+.btn-success {
+  background: linear-gradient(135deg, #28CB8B 0%, #24B77A 100%) !important;
+  border: none !important;
+  color: white !important;
+  border-radius: 2px !important;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-success:hover,
+.btn-success:focus,
+.btn-success:active {
+  background: linear-gradient(135deg, #24B77A 0%, #28CB8B 100%) !important;
+  color: white !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(40, 203, 139, 0.3);
+}
+
+/* Botão Warning */
+.btn-warning {
+  background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%) !important;
+  border: none !important;
+  color: #212529 !important;
+  border-radius: 2px !important;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-warning:hover,
+.btn-warning:focus,
+.btn-warning:active {
+  background: linear-gradient(135deg, #e0a800 0%, #d39e00 100%) !important;
+  color: #212529 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(255, 193, 7, 0.3);
+}
+
+/* Botão Edit */
+.btn-edit {
+  background: linear-gradient(135deg, #17a2b8 0%, #138496 100%) !important;
+  border: none !important;
+  color: white !important;
+  border-radius: 2px !important;
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.25rem 0.75rem;
+  transition: all 0.3s ease;
+}
+
+.btn-edit:hover,
+.btn-edit:focus,
+.btn-edit:active {
+  background: linear-gradient(135deg, #138496 0%, #117a8b 100%) !important;
+  color: white !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(23, 162, 184, 0.3);
+}
+
+/* Botão Delete */
+.btn-delete {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%) !important;
+  border: none !important;
+  color: white !important;
+  border-radius: 2px !important;
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.25rem 0.75rem;
+  transition: all 0.3s ease;
+}
+
+.btn-delete:hover,
+.btn-delete:focus,
+.btn-delete:active {
+  background: linear-gradient(135deg, #c82333 0%, #a02030 100%) !important;
+  color: white !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+}
+
+/* Sobrescrever regra existente do btn-danger */
+.btn-danger {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%) !important;
+  border: none !important;
+  color: white !important;
+  border-radius: 2px !important;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-danger:hover,
+.btn-danger:focus,
+.btn-danger:active {
+  background: linear-gradient(135deg, #c82333 0%, #a02030 100%) !important;
+  color: white !important;
+  border-color: #c82333 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+}
+
+/* ========== FIM DOS BOTÕES PADRONIZADOS ========== */
+
+.list-group-item {
+  border: none;
+  padding: 0.75rem 1rem;
+  background-color: #f8f9fa;
+  margin-bottom: 0.25rem;
+  border-radius: 0.375rem;
+}
+
+.badge {
+  font-size: 0.85em;
+}
+
+.d-flex.gap-2 {
+  gap: 0.5rem;
+}

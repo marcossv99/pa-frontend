@@ -1,0 +1,180 @@
+<div class="perfil-container">
+  <div class="header">
+    <button class="btn-voltar" (click)="voltar()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path d="m15 18-6-6 6-6"/>
+      </svg>
+      Voltar
+    </button>
+    <h1>Meu Perfil</h1>
+  </div>
+
+  <div class="content" *ngIf="!isLoading">
+    <!-- Foto de Perfil -->
+    <div class="foto-section">
+      <div class="foto-container">
+        <div class="foto-preview">
+          <img *ngIf="fotoPreview" [src]="fotoPreview" alt="Foto do perfil" />
+          <div *ngIf="!fotoPreview" class="no-photo">
+            <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+          </div>
+        </div>
+        <div class="foto-actions">
+          <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" style="display: none">
+          <button class="btn-outline-success" (click)="fileInput.click()">
+            {{ fotoPreview ? 'Trocar Foto' : 'Adicionar Foto' }}
+          </button>
+          <button *ngIf="selectedFile" class="btn-success" (click)="uploadFoto()" [disabled]="isLoading">
+            Salvar Foto
+          </button>
+          <button *ngIf="fotoPreview && !selectedFile" class="btn-danger" (click)="removerFoto()">
+            Remover Foto
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulário de Dados -->
+    <div class="form-section">
+      <h2>Dados Pessoais</h2>
+      <form (ngSubmit)="salvarPerfil()" #perfilForm="ngForm">
+        <div class="form-group">
+          <label for="nome">Nome *</label>
+          <input 
+            type="text" 
+            id="nome" 
+            name="nome"
+            [(ngModel)]="nome" 
+            required
+            placeholder="Seu nome completo">
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email *</label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email"
+            [(ngModel)]="email" 
+            required
+            placeholder="seu@email.com">
+        </div>
+
+        <div class="form-group">
+          <label for="telefone">Telefone</label>
+          <input 
+            type="tel" 
+            id="telefone" 
+            name="telefone"
+            [(ngModel)]="telefone" 
+            placeholder="(11) 99999-9999">
+        </div>
+
+        <div class="form-group">
+          <label for="senha">Nova Senha (deixe em branco para manter a atual)</label>
+          <input 
+            type="password" 
+            id="senha" 
+            name="senha"
+            [(ngModel)]="senha" 
+            placeholder="Nova senha">
+        </div>
+
+        <div class="form-group" *ngIf="senha">
+          <label for="confirmarSenha">Confirmar Nova Senha</label>
+          <input 
+            type="password" 
+            id="confirmarSenha" 
+            name="confirmarSenha"
+            [(ngModel)]="confirmarSenha" 
+            placeholder="Confirme a nova senha">
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-success" [disabled]="isLoading || !perfilForm.form.valid">
+            {{ isLoading ? 'Salvando...' : 'Salvar Alterações' }}
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Seção de Reservas -->
+    <div class="reservas-section">
+      <h2>Minhas Reservas</h2>
+      <div class="reservas-grid" *ngIf="reservas.length > 0; else noReservas">
+        <div class="reserva-card" *ngFor="let reserva of reservas">
+          <div class="reserva-info">
+            <h3>{{ reserva.quadraModalidade || 'Quadra' }} {{ reserva.quadraNome }}</h3>
+            <p class="data">{{ reserva.data | date:'dd/MM/yyyy' }}</p>
+            <p class="horario">{{ reserva.horaInicio }}:00 - {{ reserva.horaFim }}:00</p>
+            <p class="status" [class]="'status-' + (reserva.status || 'ativa')">
+              {{ reserva.status || 'CONFIRMADA' }}
+            </p>
+          </div>
+        </div>
+      </div>
+      <ng-template #noReservas>
+        <div class="no-reservas">
+          <p>Você ainda não possui reservas.</p>
+          <button class="btn-success" (click)="voltar()">
+            Voltar ao Menu
+          </button>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading" *ngIf="isLoading">
+    <div class="spinner"></div>
+    <p>Carregando...</p>
+  </div>
+
+  <!-- Mensagens -->
+  <div class="message" *ngIf="message" [class]="'message-' + messageType">
+    {{ message }}
+  </div>
+</div>
+
+<!-- Rodapé recriado do zero, sempre no final da página -->
+<footer class="footer mt-auto py-4 bg-dark text-light border-top" style="position:relative; width:100%;">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 mb-3 mb-md-0">
+        <h6 class="fw-bold text-success">Nossos Esportes</h6>
+        <ul class="list-unstyled mb-0">
+          <li><i class="bi bi-check-circle text-success me-2"></i>Futebol</li>
+          <li><i class="bi bi-check-circle text-success me-2"></i>Vôlei</li>
+          <li><i class="bi bi-check-circle text-success me-2"></i>Tênis</li>
+          <li><i class="bi bi-check-circle text-success me-2"></i>Basquete</li>
+        </ul>
+      </div>
+      <div class="col-md-4 mb-3 mb-md-0">
+        <h6 class="fw-bold text-success">Facilidades</h6>
+        <ul class="list-unstyled mb-0">
+          <li><i class="bi bi-check-circle text-success me-2"></i>Vestiários completos</li>
+          <li><i class="bi bi-check-circle text-success me-2"></i>Estacionamento</li>
+          <li><i class="bi bi-check-circle text-success me-2"></i>Segurança 24h</li>
+          <li><i class="bi bi-check-circle text-success me-2"></i>Equipamentos inclusos</li>
+        </ul>
+      </div>
+      <div class="col-md-4">
+        <h6 class="fw-bold text-success">Horário de Funcionamento</h6>
+        <ul class="list-unstyled mb-0">
+          <li><i class="bi bi-clock text-success me-2"></i>Segunda a Sexta: 6h às 22h</li>
+          <li><i class="bi bi-clock text-success me-2"></i>Sábado: 7h às 20h</li>
+          <li><i class="bi bi-clock text-success me-2"></i>Domingo: 8h às 18h</li>
+        </ul>
+      </div>
+    </div>
+    <hr class="bg-light opacity-50 my-3" />
+    <div class="row">
+      <div class="col text-center small">
+        &copy; 2025 Clube Esportivo. Todos os direitos reservados.
+      </div>
+    </div>
+  </div>
+</footer>

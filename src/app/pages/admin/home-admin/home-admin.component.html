@@ -1,0 +1,790 @@
+<div class="container-fluid p-4">
+  <!-- Header Dashboard -->
+  <div class="d-flex justify-content-between align-items-center mb-4 dashboard-header">
+    <div>
+      <h1 class="fw-bold mb-1 text-success">Dashboard Administrativo</h1>
+      <p class="text-muted mb-0">Gerencie reservas, usuários e quadras do sistema</p>
+    </div>
+    <div class="d-flex align-items-center gap-4">
+      <nav>
+        <ul class="nav">
+          <li class="nav-item"><a class="nav-link active" style="cursor: pointer;">Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link" style="cursor: pointer;">Reservas</a></li>
+          <li class="nav-item"><a class="nav-link" style="cursor: pointer;">Usuários</a></li>
+          <li class="nav-item"><a class="nav-link" style="cursor: pointer;">Relatórios</a></li>
+        </ul>
+      </nav>
+      <!-- Botão de Logout -->
+      <button 
+        class="btn btn-outline-danger btn-sm d-flex align-items-center gap-2" 
+        (click)="fazerLogout()"
+        title="Fazer logout">
+        <i class="bi bi-box-arrow-right"></i>
+        Logout
+      </button>
+    </div>
+  </div>
+
+  <!-- Cards de Estatísticas Compactos -->
+  <div class="row mb-4">
+    <div class="col-lg-3 col-md-6 mb-3">
+      <div class="card stats-card border-0 shadow-sm h-100">
+        <div class="card-body text-center p-3">
+          <i class="bi bi-calendar-check display-6 text-success mb-2"></i>
+          <h4 class="fw-bold mb-1">{{ totalReservas }}</h4>
+          <small class="text-muted">Total de Reservas</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6 mb-3">
+      <div class="card stats-card border-0 shadow-sm h-100">
+        <div class="card-body text-center p-3">
+          <i class="bi bi-people display-6 text-primary mb-2"></i>
+          <h4 class="fw-bold mb-1">{{ totalUsuarios }}</h4>
+          <small class="text-muted">Usuários Cadastrados</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6 mb-3">
+      <div class="card stats-card border-0 shadow-sm h-100">
+        <div class="card-body text-center p-3">
+          <i class="bi bi-diagram-3 display-6 text-info mb-2"></i>
+          <h4 class="fw-bold mb-1">{{ totalQuadras }}</h4>
+          <small class="text-muted">Quadras Disponíveis</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6 mb-3">
+      <div class="card stats-card border-0 shadow-sm h-100">
+        <div class="card-body text-center p-3">
+          <i class="bi bi-clock display-6 text-warning mb-2"></i>
+          <h4 class="fw-bold mb-1">{{ reservasHoje }}</h4>
+          <small class="text-muted">Reservas Hoje</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Menu de Ações Rápidas Compacto -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm quick-actions-card">
+        <div class="card-header bg-white border-0 pb-0">
+          <h5 class="fw-bold mb-0 text-success">
+            <i class="bi bi-lightning-charge me-2"></i>
+            Ações Rápidas
+          </h5>
+        </div>
+        <div class="card-body pt-3">
+          <div class="row g-2">
+            <div class="col-lg-2 col-md-4">
+              <button class="btn btn-primary-custom w-100 py-2" (click)="irParaCadastroSocio()">
+                <i class="bi bi-person-plus me-2"></i>
+                Cadastrar Associado
+              </button>
+            </div>
+            <div class="col-lg-2 col-md-4">
+              <button class="btn btn-primary-custom w-100 py-2" (click)="irParaCadastroAdmin()">
+                <i class="bi bi-shield-check me-2"></i>
+                Cadastrar Admin
+              </button>
+            </div>
+            <div class="col-lg-2 col-md-4">
+              <button class="btn btn-primary-custom w-100 py-2" (click)="irParaCadastroQuadra()">
+                <i class="bi bi-plus-square me-2"></i>
+                Registrar Quadra
+              </button>
+            </div>
+            <div class="col-lg-3 col-md-6">
+              <button class="btn btn-primary-custom w-100 py-2" (click)="verTodasQuadras()">
+                <i class="bi bi-list-ul me-2"></i>
+                Ver Todas as Quadras
+              </button>
+            </div>
+            <div class="col-lg-3 col-md-6">
+              <button class="btn btn-secondary-custom w-100 py-2" (click)="recarregarDados()">
+                <i class="bi bi-arrow-clockwise me-2"></i>
+                Atualizar Dados
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- Reservas Recentes -->
+    <div class="col-lg-8 mb-4">
+      <div class="card border-0 shadow-sm h-100 main-content-card">
+        <div class="card-header bg-white border-0">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="fw-bold mb-0 text-success">
+              <i class="bi bi-calendar-event me-2"></i>
+              Reservas do Sistema
+            </h5>
+            <div class="d-flex gap-2">
+              <input type="text" class="form-control form-control-sm" placeholder="Buscar reserva..." 
+                     [value]="filtroReserva" (input)="onFiltroReservaInput($event)" style="width: 200px;">
+              <button class="btn btn-outline-secondary btn-sm" (click)="recarregarReservas()">
+                <i class="bi bi-arrow-clockwise"></i>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Controles de Filtro -->
+          <div class="d-flex flex-wrap gap-2 align-items-center">
+
+            <button type="button" class="btn btn-outline-danger btn-sm"
+              [class.active]="mostrarReservasCanceladas"
+              (click)="toggleMostrarCanceladas()">
+              <i class="bi bi-x-circle me-1"></i>
+              {{ mostrarReservasCanceladas ? 'Ocultar canceladas' : 'Mostrar canceladas' }}
+            </button>
+
+            <button type="button" class="btn btn-outline-primary btn-sm"
+              [class.active]="mostrarApenasReservasFuturas"
+              (click)="toggleApenasFuturas()">
+              <i class="bi bi-clock-history me-1"></i>
+              {{ mostrarApenasReservasFuturas ? 'Apenas futuras' : 'Todas as datas' }}
+            </button>
+            
+            <button class="btn btn-outline-secondary btn-sm" (click)="limparFiltrosReservas()">
+              <i class="bi bi-filter-circle me-1"></i>
+              Limpar filtros
+            </button>
+            
+            <small class="text-muted ms-auto">
+              {{ reservas.length }} reserva(s) encontrada(s)
+            </small>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <!-- Loading -->
+          <div *ngIf="carregandoReservas" class="text-center py-4">
+            <div class="spinner-border text-success" role="status">
+              <span class="visually-hidden">Carregando...</span>
+            </div>
+          </div>
+
+          <!-- Error -->
+          <div *ngIf="erroReservas" class="alert alert-danger m-3" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            {{ erroReservas }}
+            <button class="btn btn-sm btn-outline-danger ms-2" (click)="carregarReservas()">
+              Tentar novamente
+            </button>
+          </div>
+
+          <!-- Lista de Reservas -->
+          <div *ngIf="!carregandoReservas && !erroReservas" class="list-group list-group-flush">
+            <div *ngFor="let reserva of reservasPaginadas" class="list-group-item d-flex justify-content-between align-items-start py-3">
+              <div class="flex-grow-1">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <h6 class="mb-0 fw-bold text-dark">{{ obterNomeQuadra(reserva) }}</h6>
+                  <span class="badge" [ngClass]="obterStatusClass(reserva.status || 'CONFIRMADA')">
+                    {{ obterStatusTexto(reserva.status || 'CONFIRMADA') }}
+                  </span>
+                </div>
+                <div class="mb-2">
+                  <p class="mb-1 text-dark">
+                    <i class="bi bi-person-circle me-1 text-success"></i>
+                    <strong>{{ obterNomeUsuario(reserva) }}</strong>
+                  </p>
+                  <p class="mb-1 text-muted">
+                    <i class="bi bi-calendar3 me-1"></i>Data: {{ formatarData(reserva) }} •
+                    <i class="bi bi-clock me-1"></i>Horário: {{ formatarHorario(reserva) }}
+                  </p>
+                  <small class="text-muted">
+                    <i class="bi bi-people me-1"></i>Convidados: {{ reserva.membros.length || 0 }} pessoa(s)
+                  </small>
+                  
+                  <!-- Informações de cancelamento condensadas -->
+                  <div *ngIf="reserva.cancelada" class="mt-2 p-2 bg-light border-start border-danger border-3 rounded">
+                    <small class="text-danger fw-bold">
+                      <i class="bi bi-x-circle me-1"></i>
+                      Cancelada por: 
+                      <span class="badge ms-1" 
+                            [ngClass]="reserva.canceladaPor === 'ADMIN' ? 'bg-warning text-dark' : 'bg-info'">
+                        {{ reserva.canceladaPor === 'ADMIN' ? 'Admin' : 'Associado' }}
+                      </span>
+                    </small>
+                    <div *ngIf="reserva.canceladaPor === 'ADMIN' && reserva.motivoCancelamento" class="mt-1">
+                      <small class="text-muted">
+                        <strong>Motivo:</strong> {{ reserva.motivoCancelamento }}
+                      </small>
+                    </div>
+                    <div *ngIf="reserva.dataCancelamento" class="mt-1">
+                      <small class="text-muted">
+                        <i class="bi bi-clock me-1"></i>{{ formatarDataCancelamento(reserva) }}
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="ms-3 d-flex flex-column gap-1">
+                <button class="btn btn-outline-primary btn-sm" (click)="verDetalhesReserva(reserva)">
+                  <i class="bi bi-eye me-1"></i>
+                  Ver Detalhes
+                </button>
+                <button 
+                  *ngIf="podeSerCancelada(reserva)"
+                  class="btn btn-outline-warning btn-sm" 
+                  (click)="abrirModalConfirmacaoCancelamento(reserva)"
+                  title="Cancelar reserva">
+                  Cancelar
+                </button>
+                <span 
+                  *ngIf="reserva.cancelada" 
+                  class="badge bg-danger">
+                  Cancelada
+                </span>
+                <span 
+                  *ngIf="!reserva.cancelada && isReservaPassada(reserva)" 
+                  class="badge bg-secondary">
+                  Realizada
+                </span>
+              </div>
+            </div>
+
+            <!-- Empty state -->
+            <div *ngIf="reservasPaginadas.length === 0" class="text-center py-5">
+              <i class="bi bi-calendar-x display-1 text-muted"></i>
+              <p class="text-muted mt-3 mb-0">
+                <span *ngIf="filtroReserva">Nenhuma reserva encontrada para "{{ filtroReserva }}"</span>
+                <span *ngIf="!filtroReserva">Nenhuma reserva encontrada</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Usuários Recentes -->
+    <div class="col-lg-4 mb-4">
+      <div class="card border-0 shadow-sm h-100 main-content-card">
+        <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
+          <h5 class="fw-bold mb-0 text-success">
+            <i class="bi bi-people me-2"></i>
+            Usuários
+          </h5>
+          <button class="btn btn-outline-secondary btn-sm" (click)="recarregarUsuarios()">
+            <i class="bi bi-arrow-clockwise"></i>
+          </button>
+        </div>
+        <div class="card-body p-0">
+          <!-- Loading -->
+          <div *ngIf="carregandoUsuarios" class="text-center py-4">
+            <div class="spinner-border text-success" role="status">
+              <span class="visually-hidden">Carregando...</span>
+            </div>
+          </div>
+
+          <!-- Error -->
+          <div *ngIf="erroUsuarios" class="alert alert-danger m-3" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            {{ erroUsuarios }}
+            <button class="btn btn-sm btn-outline-danger ms-2" (click)="carregarUsuarios()">
+              Tentar novamente
+            </button>
+          </div>
+
+          <!-- Lista de Usuários -->
+          <div *ngIf="!carregandoUsuarios && !erroUsuarios" class="list-group list-group-flush">
+            <div *ngFor="let usuario of usuariosPaginados.slice(0, 5)" class="list-group-item d-flex justify-content-between align-items-center py-3">
+              <div class="flex-grow-1">
+                <h6 class="mb-1 fw-bold text-dark">{{ usuario.nome }}</h6>
+                <small class="text-muted d-block">{{ usuario.email }}</small>
+                <div class="mt-2">
+                  <span class="badge" [ngClass]="{
+                    'bg-danger': usuario.isAdmin,
+                    'bg-secondary': !usuario.isAdmin
+                  }">
+                    {{ usuario.isAdmin ? 'Admin' : 'Associado' }}
+                  </span>
+                </div>
+              </div>
+              <div class="dropdown">
+                <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" 
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="bi bi-three-dots-vertical"></i>
+                </button>
+                <ul class="dropdown-menu">
+                  <li><button class="dropdown-item" type="button" (click)="editarUsuario(usuario)">
+                    <i class="bi bi-pencil me-2"></i>Editar
+                  </button></li>
+                  <li><button class="dropdown-item text-danger" type="button" 
+                         *ngIf="!usuario.isAdmin" (click)="excluirUsuario(usuario)">
+                    <i class="bi bi-trash me-2"></i>Excluir
+                  </button></li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Ver todos os usuários -->
+            <div class="list-group-item text-center py-3 bg-light">
+              <button class="btn btn-outline-primary btn-sm" (click)="verTodosUsuarios()">
+                <i class="bi bi-list me-2"></i>
+                Ver Todos os Usuários
+              </button>
+            </div>
+
+            <!-- Empty state -->
+            <div *ngIf="usuariosPaginados.length === 0" class="text-center py-5">
+              <i class="bi bi-people display-1 text-muted"></i>
+              <p class="text-muted mt-3 mb-0">Nenhum usuário cadastrado</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Detalhes da Reserva -->
+  <div class="modal fade" id="modalDetalhesReserva" tabindex="-1" aria-labelledby="modalDetalhesReservaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-success text-white">
+          <h5 class="modal-title" id="modalDetalhesReservaLabel">
+            <i class="bi bi-calendar-check me-2"></i>
+            Detalhes da Reserva
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" *ngIf="reservaSelecionada">
+          <div class="row">
+            <div class="col-md-8">
+              <div class="card border-0 bg-light">
+                <div class="card-body">
+                  <h6 class="fw-bold mb-3">Informações da Reserva</h6>
+                  
+                  <div class="row mb-2">
+                    <div class="col-4 text-muted">Usuário:</div>
+                    <div class="col-8 fw-bold">{{ obterNomeUsuario(reservaSelecionada) }}</div>
+                  </div>
+
+                  <div class="row mb-2">
+                    <div class="col-4 text-muted">Quadra:</div>
+                    <div class="col-8 fw-bold">{{ obterNomeQuadra(reservaSelecionada) }}</div>
+                  </div>
+
+                  <div class="row mb-2">
+                    <div class="col-4 text-muted">Data:</div>
+                    <div class="col-8 fw-bold">{{ formatarData(reservaSelecionada) }}</div>
+                  </div>
+
+                  <div class="row mb-2">
+                    <div class="col-4 text-muted">Horário:</div>
+                    <div class="col-8 fw-bold">{{ formatarHorario(reservaSelecionada) }}</div>
+                  </div>
+
+                  <div class="row mb-2">
+                    <div class="col-4 text-muted">Convidados:</div>
+                    <div class="col-8 fw-bold">
+                      {{ reservaSelecionada.membros.length || 0 }} convidado(s)
+                      <div *ngIf="reservaSelecionada.membros && reservaSelecionada.membros.length > 0" class="mt-1">
+                        <small class="text-muted">
+                          <strong>Nomes:</strong> {{ reservaSelecionada.membros.join(', ') }}
+                        </small>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row mb-0">
+                    <div class="col-4 text-muted">Status:</div>
+                    <div class="col-8">
+                      <span class="badge" [ngClass]="obterStatusClass(reservaSelecionada.status || 'CONFIRMADA')">
+                        {{ obterStatusTexto(reservaSelecionada.status || 'CONFIRMADA') }}
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- Informações de Cancelamento -->
+                  <div *ngIf="reservaSelecionada.cancelada" class="mt-3 p-3 bg-light border-start border-danger border-4">
+                    <h6 class="fw-bold text-danger mb-2">
+                      <i class="bi bi-x-circle me-2"></i>
+                      Informações de Cancelamento
+                    </h6>
+                    
+                    <div class="row mb-2">
+                      <div class="col-4 text-muted">Cancelada por:</div>
+                      <div class="col-8 fw-bold">
+                        <span class="badge" 
+                              [ngClass]="reservaSelecionada.canceladaPor === 'ADMIN' ? 'bg-warning text-dark' : 'bg-info'">
+                          <i [class]="reservaSelecionada.canceladaPor === 'ADMIN' ? 'bi bi-shield-check me-1' : 'bi bi-person me-1'"></i>
+                          {{ reservaSelecionada.canceladaPor === 'ADMIN' ? 'Administrador' : 'Associado' }}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div *ngIf="reservaSelecionada.dataCancelamento" class="row mb-2">
+                      <div class="col-4 text-muted">Data do cancelamento:</div>
+                      <div class="col-8 fw-bold">{{ formatarDataCancelamento(reservaSelecionada) }}</div>
+                    </div>
+
+                    <div *ngIf="reservaSelecionada.canceladaPor === 'ADMIN' && reservaSelecionada.motivoCancelamento" class="row mb-0">
+                      <div class="col-4 text-muted">Motivo:</div>
+                      <div class="col-8">
+                        <div class="alert alert-warning mb-0 py-2">
+                          <i class="bi bi-exclamation-triangle me-2"></i>
+                          <strong>{{ reservaSelecionada.motivoCancelamento }}</strong>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div *ngIf="reservaSelecionada.canceladaPor === 'ADMIN' && !reservaSelecionada.motivoCancelamento" class="row mb-0">
+                      <div class="col-12">
+                        <small class="text-muted">
+                          <i class="bi bi-info-circle me-1"></i>
+                          Motivo do cancelamento não informado.
+                        </small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="text-center">
+                <!-- Foto do usuário -->
+                <div class="user-photo-container position-relative mx-auto mb-3" 
+                     style="width: 120px; height: 120px;">
+                  
+                  <!-- Se tem foto -->
+                  <div *ngIf="temFotoUsuario(reservaSelecionada)" 
+                       class="user-photo-img rounded-circle border border-3 border-success"
+                       style="width: 120px; height: 120px; overflow: hidden; background: #f8f9fa;">
+                    <img [src]="obterFotoUsuario(reservaSelecionada)" 
+                         [alt]="'Foto de ' + obterNomeUsuario(reservaSelecionada)"
+                         class="w-100 h-100"
+                         style="object-fit: cover;"
+                         (error)="onImageError($event)">
+                    <!-- Fallback se a imagem não carregar -->
+                    <div class="user-photo-fallback bg-light rounded-circle d-none align-items-center justify-content-center" 
+                         style="width: 120px; height: 120px; position: absolute; top: 0; left: 0;">
+                      <i class="bi bi-person-circle display-1 text-muted"></i>
+                    </div>
+                  </div>
+                  
+                  <!-- Se não tem foto -->
+                  <div *ngIf="!temFotoUsuario(reservaSelecionada)" 
+                       class="user-photo-placeholder bg-light rounded-circle border border-2 border-muted d-flex align-items-center justify-content-center" 
+                       style="width: 120px; height: 120px;">
+                    <i class="bi bi-person-circle display-1 text-muted"></i>
+                  </div>
+                  
+                  <!-- Badge de status -->
+                  <div class="position-absolute bottom-0 end-0">
+                    <span class="badge bg-success rounded-circle p-2" title="Usuário ativo">
+                      <i class="bi bi-check-lg"></i>
+                    </span>
+                  </div>
+                </div>
+                
+                <h6 class="fw-bold mb-1">{{ obterNomeUsuario(reservaSelecionada) }}</h6>
+                <small class="text-muted d-block">
+                  <i class="bi bi-person-badge me-1"></i>
+                  Associado
+                </small>
+                
+                <!-- Informações adicionais do usuário -->
+                <div class="mt-3 p-2 bg-light rounded">
+                  <small class="text-muted">
+                    <i class="bi bi-info-circle me-1"></i>
+                    <strong>ID:</strong> {{ reservaSelecionada.usuarioId || 'N/A' }}
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="alert alert-info-custom mt-3 mb-0">
+            <i class="bi bi-info-circle me-2"></i>
+            <small>Esta reserva foi criada em {{ formatarDataCriacao(reservaSelecionada) }}.</small>
+          </div>
+        </div>
+        <div class="modal-footer modal-footer-accent">
+          <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Todos os Usuários -->
+  <div class="modal fade" id="modalTodosUsuarios" tabindex="-1" aria-labelledby="modalTodosUsuariosLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title" id="modalTodosUsuariosLabel">
+            <i class="bi bi-people me-2"></i>
+            Todos os Usuários do Sistema
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Filtros -->
+          <div class="row mb-3">
+            <div class="col-md-4">
+              <label class="form-label">Filtrar por tipo:</label>
+              <select class="form-select" [(ngModel)]="filtroTipoUsuario" (change)="aplicarFiltroUsuarios()">
+                <option value="todos">Todos os usuários</option>
+                <option value="admin">Apenas admins</option>
+                <option value="associado">Apenas associados</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Pesquisar por nome:</label>
+              <input type="text" class="form-control" placeholder="Digite o nome..." [(ngModel)]="filtroNomeUsuario" (input)="aplicarFiltroUsuarios()">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Pesquisar por email:</label>
+              <input type="text" class="form-control" placeholder="Digite o email..." [(ngModel)]="filtroEmailUsuario" (input)="aplicarFiltroUsuarios()">
+            </div>
+          </div>
+
+          <!-- Loading -->
+          <div *ngIf="carregandoTodosUsuarios" class="text-center py-4">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Carregando...</span>
+            </div>
+            <p class="mt-2 text-muted">Carregando usuários...</p>
+          </div>
+
+          <!-- Erro -->
+          <div *ngIf="erroTodosUsuarios" class="alert alert-danger">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            {{ erroTodosUsuarios }}
+          </div>
+
+          <!-- Tabela de usuários -->
+          <div *ngIf="!carregandoTodosUsuarios && !erroTodosUsuarios" class="table-responsive">
+            <table class="table table-hover">
+              <thead class="table-light">
+                <tr>
+                  <th>ID</th>
+                  <th>Nome</th>
+                  <th>Email</th>
+                  <th>CPF</th>
+                  <th>Telefone</th>
+                  <th>Tipo</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let usuario of usuariosFiltrados">
+                  <td>{{ usuario.id }}</td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <i class="bi" [ngClass]="usuario.isAdmin ? 'bi-shield-check text-danger' : 'bi-person text-primary'" style="font-size: 1.2em;"></i>
+                      <span class="ms-2 fw-bold">{{ usuario.nome }}</span>
+                    </div>
+                  </td>
+                  <td>{{ usuario.email }}</td>
+                  <td>{{ usuario.cpf }}</td>
+                  <td>{{ usuario.telefone || '-' }}</td>
+                  <td>
+                    <span class="badge" [ngClass]="usuario.isAdmin ? 'bg-danger' : 'bg-primary'">
+                      {{ usuario.isAdmin ? 'ADMIN' : 'ASSOCIADO' }}
+                    </span>
+                  </td>
+                  <td>
+                    <div class="btn-group btn-group-sm">
+                      <button class="btn btn-outline-info" (click)="visualizarDetalhesUsuario(usuario)" title="Ver detalhes">
+                        <i class="bi bi-eye"></i>
+                      </button>
+                      <button class="btn btn-outline-warning" (click)="editarUsuario(usuario)" title="Editar">
+                        <i class="bi bi-pencil"></i>
+                      </button>
+                      <button class="btn btn-outline-danger" (click)="abrirModalExclusaoUsuario(usuario)" title="Excluir">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- Paginação -->
+            <nav *ngIf="totalPaginasUsuarios > 1" aria-label="Navegação de usuários">
+              <ul class="pagination justify-content-center">
+                <li class="page-item" [class.disabled]="usuariosPaginacaoCompleta.currentPage === 0">
+                  <button class="page-link" (click)="irParaPaginaUsuarios(usuariosPaginacaoCompleta.currentPage - 1)">
+                    <i class="bi bi-chevron-left"></i>
+                  </button>
+                </li>
+                
+                <li *ngFor="let page of [].constructor(totalPaginasUsuarios); let i = index" 
+                    class="page-item" [class.active]="i === usuariosPaginacaoCompleta.currentPage">
+                  <button class="page-link" (click)="irParaPaginaUsuarios(i)">{{ i + 1 }}</button>
+                </li>
+                
+                <li class="page-item" [class.disabled]="usuariosPaginacaoCompleta.currentPage >= totalPaginasUsuarios - 1">
+                  <button class="page-link" (click)="irParaPaginaUsuarios(usuariosPaginacaoCompleta.currentPage + 1)">
+                    <i class="bi bi-chevron-right"></i>
+                  </button>
+                </li>
+              </ul>
+            </nav>
+
+            <!-- Empty state -->
+            <div *ngIf="usuariosFiltrados.length === 0" class="text-center py-5">
+              <i class="bi bi-people display-1 text-muted"></i>
+              <p class="text-muted mt-3 mb-0">Nenhum usuário encontrado</p>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Edição de Usuário -->
+  <div class="modal fade" id="modalEditarUsuario" tabindex="-1" aria-labelledby="modalEditarUsuarioLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-warning text-dark">
+          <h5 class="modal-title" id="modalEditarUsuarioLabel">
+            <i class="bi bi-pencil me-2"></i>
+            Editar Usuário
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" *ngIf="usuarioParaEditar">
+          <form #editarUsuarioForm="ngForm">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="editNome" class="form-label">Nome *</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="editNome"
+                  name="editNome"
+                  [(ngModel)]="formEditarUsuario.nome" 
+                  required
+                  placeholder="Nome completo">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="editEmail" class="form-label">Email *</label>
+                <input 
+                  type="email" 
+                  class="form-control" 
+                  id="editEmail"
+                  name="editEmail"
+                  [(ngModel)]="formEditarUsuario.email" 
+                  required
+                  placeholder="email@exemplo.com">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="editCpf" class="form-label">CPF *</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="editCpf"
+                  name="editCpf"
+                  [(ngModel)]="formEditarUsuario.cpf" 
+                  required
+                  placeholder="000.000.000-00">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="editTelefone" class="form-label">Telefone</label>
+                <input 
+                  type="tel" 
+                  class="form-control" 
+                  id="editTelefone"
+                  name="editTelefone"
+                  [(ngModel)]="formEditarUsuario.telefone" 
+                  placeholder="(11) 99999-9999">
+              </div>
+            </div>
+            <div class="mb-3">
+              <div class="form-check">
+                <input 
+                  class="form-check-input" 
+                  type="checkbox" 
+                  id="editIsAdmin"
+                  name="editIsAdmin"
+                  [(ngModel)]="formEditarUsuario.isAdmin">
+                <label class="form-check-label" for="editIsAdmin">
+                  <strong>Usuário Administrador</strong>
+                  <small class="d-block text-muted">Marque esta opção para dar privilégios de administrador ao usuário</small>
+                </label>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal">Cancelar</button>
+          <button 
+            type="button" 
+            class="btn btn-success" 
+            (click)="salvarEdicaoUsuario()"
+            [disabled]="!formEditarUsuario.nome || !formEditarUsuario.email || !formEditarUsuario.cpf">
+            <i class="bi bi-check me-2"></i>
+            Salvar Alterações
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Confirmação de Cancelamento -->
+  <div class="modal fade" id="modalConfirmacaoCancelamento" tabindex="-1" aria-labelledby="modalConfirmacaoCancelamentoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-warning text-dark">
+          <h5 class="modal-title" id="modalConfirmacaoCancelamentoLabel">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            Cancelar Reserva
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="fecharModalConfirmacaoCancelamento()"></button>
+        </div>
+        <div class="modal-body">
+          <div *ngIf="reservaParaCancelar" class="mb-3">
+            <div class="alert alert-warning">
+              <p class="mb-2"><strong>Você está prestes a cancelar a seguinte reserva:</strong></p>
+              <ul class="mb-0">
+                <li><strong>Quadra:</strong> {{ obterNomeQuadra(reservaParaCancelar) }}</li>
+                <li><strong>Data:</strong> {{ formatarData(reservaParaCancelar) }}</li>
+                <li><strong>Horário:</strong> {{ formatarHorario(reservaParaCancelar) }}</li>
+                <li><strong>Associado:</strong> {{ obterNomeUsuario(reservaParaCancelar) }}</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <label for="motivoCancelamento" class="form-label">
+              <strong>Motivo do Cancelamento <span class="text-danger">*</span></strong>
+            </label>
+            <textarea 
+              id="motivoCancelamento"
+              class="form-control" 
+              rows="3" 
+              [(ngModel)]="motivoCancelamento"
+              placeholder="Informe o motivo do cancelamento... (Este motivo será visível para o associado)"
+              maxlength="500">
+            </textarea>
+            <div class="form-text">
+              O motivo será exibido para o associado no histórico de reservas.
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="fecharModalConfirmacaoCancelamento()">
+            Cancelar
+          </button>
+          <button 
+            type="button" 
+            class="btn btn-warning"
+            (click)="confirmarCancelamentoReserva()"
+            [disabled]="!motivoCancelamento || motivoCancelamento.trim().length === 0">
+            Confirmar Cancelamento
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
