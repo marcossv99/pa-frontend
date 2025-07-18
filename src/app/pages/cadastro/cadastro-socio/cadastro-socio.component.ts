@@ -39,6 +39,7 @@ export class CadastroSocioComponent {
   limparCampo(campo: keyof CadastroParcialDTO) {
     this.dadosCadastro[campo] = '';
   }
+  
   // Delegação para o service base - eliminando redundância
   formatarCpf(cpf: string): string {
     return this.cadastroBaseService.formatarCpf(cpf);

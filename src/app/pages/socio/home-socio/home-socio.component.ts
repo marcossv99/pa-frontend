@@ -804,6 +804,7 @@ export class HomeSocioComponent implements OnInit, OnDestroy {
     console.error('Erro em getImagePath:', error, quadra);
     return '/quadras/futebol.png';
   }
+}
 
 
   // Métodos para upload de imagem de perfil
