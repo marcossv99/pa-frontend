@@ -782,30 +782,15 @@ export class HomeSocioComponent implements OnInit, OnDestroy {
 
   // Método para obter o caminho correto da imagem
   getImagePath(quadra: any): string {
-  try {
-    if (!quadra) {
-      console.warn('getImagePath: quadra é undefined ou null');
-      return '/quadras/futebol.png';
-    }
-    if (quadra.img) {
-      if (typeof quadra.img !== 'string') {
-        console.error('getImagePath: img não é string', quadra.img);
-        return '/quadras/futebol.png';
-      }
+    if (quadra?.img) {
       if (quadra.img.startsWith('http') || quadra.img.startsWith('/')) {
         return quadra.img;
       }
       // Sempre buscar da pasta pública quadras
       return `/quadras/${quadra.img}`;
     }
-    console.warn('getImagePath: quadra.img não definido', quadra);
-    return '/quadras/futebol.png';
-  } catch (error) {
-    console.error('Erro em getImagePath:', error, quadra);
-    return '/quadras/futebol.png';
+    return '/quadras/futebol-quadra.png';
   }
-}
-
 
   // Métodos para upload de imagem de perfil
   carregarPerfilUsuario() {
